@@ -16,7 +16,7 @@ def stp_converter(
     surface_reflectivity_name='reflective',
     merge_tolerance=1e4,
     cubit_filename='dagmc.cub',
-    geometry_details_filename='log.json',
+    geometry_details_filename='geometry_details.json',
     faceting_tolerance=1.0e-1
 ):
 
