@@ -127,3 +127,21 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Cubit lisense file
+license.lic
+
+# CAD files used for testing
+*.stp
+
+# Cubit journal files
+*.jou
+
+# dagmc plugin for cubit
+*.tgz
+
+# output files from cubit
+*.cub
+*.cub5
+*.h5m
+geometry_details.json

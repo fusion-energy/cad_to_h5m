@@ -1,6 +1,9 @@
 # This Dockerfile creates an enviroment / dependancies needed to run the 
 # cubit_docker package.
 
+# You will need to have you license file saved as license.lic in the same folder
+# as this Dockerfile when building
+
 # To build this Dockerfile into a docker image:
 # docker build -t cubit_docker .
 
@@ -51,23 +54,23 @@ RUN apt-get install -y libxcb-xinerama0
 # install cubit
 RUN dpkg -i coreform-cubit-2021.5.deb
 
-# assumes you have a local copy of your lic file ready to copy into the docker image
-# COPY cloud.lic /opt/Coreform-Cubit-2021.5/bin/licenses/cloud.lic
 
 # makes a python file and trys to import cubit
-RUN printf 'import sys\nsys.path.append("/opt/Coreform-Cubit-2021.5/bin/python3/")\nimport cubit\ncubit.init([])\n' >> test_cubit_import.py
+RUN printf 'import sys\nsys.path.append("/opt/Coreform-Cubit-2021.5/bin/")\nimport cubit\ncubit.init([])\n' >> test_cubit_import.py
+
+# assumes you have a local copy of your lic file ready to copy into the docker image
+COPY license.lic /opt/Coreform-Cubit-2021.5/bin/licenses/license.lic
 
 
+RUN wget https://github.com/svalinn/Cubit-plugin/releases/download/0.1.0/svalinn-plugin_ubuntu-20.04_cubit_2021.5.tgz
+RUN tar -xzvf svalinn-plugin_ubuntu-20.04_cubit_2021.5.tgz -C /opt/Coreform-Cubit-2021.5
 
-# RUN wget https://github.com/svalinn/Cubit-plugin/releases/download/0.1.0/svalinn-plugin_ubuntu-20.04_cubit_2021.5.tgz
-# RUN tar -xzvf svalinn-plugin_ubuntu-20.04_cubit_2021.5.tgz -C /opt/Coreform-Cubit-2021.5
+# FROM dependencies as final
 
-# # FROM dependencies as final
+COPY cad_to_h5m cad_to_h5m/
+COPY setup.py setup.py
+COPY tests tests/
+COPY README.md README.md
 
-# COPY cad_to_h5m cad_to_h5m/
-# COPY setup.py setup.py
-# COPY tests tests/
-# COPY README.md README.md
-
-# RUN python setup.py install
+RUN python setup.py install
 

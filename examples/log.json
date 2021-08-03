@@ -1,0 +1,10 @@
+[
+    {
+        "filename": "part1.stp",
+        "material_tag": "mat1",
+        "volumes": [
+            "1",
+            "2"
+        ]
+    }
+]
