@@ -2,7 +2,7 @@
 from cad_to_h5m import cad_to_h5m
 import urllib.request
 
-
+cd 
 
 # url = 'https://raw.githubusercontent.com/Shimwell/fusion_example_for_openmc_using_paramak/main/stp_files/blanket.stp'
 # urllib.request.urlretrieve(url, 'blanket.stp')
@@ -56,7 +56,7 @@ cad_to_h5m(
         {
             "material_tag": "vacuum",
             "filename": "sector_wedge.stp",
-            "surface_reflectivity": True,
+            # "surface_reflectivity": True,
         }
     ],
     h5m_filename='dagmc.h5m',

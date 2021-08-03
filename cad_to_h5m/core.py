@@ -7,7 +7,7 @@ def cad_to_h5m(
     h5m_filename='dagmc.h5m',
     cubit_path='/opt/Coreform-Cubit-2021.5/bin/',
     surface_reflectivity_name='reflective',
-    merge_tolerance=1e4,
+    merge_tolerance=1e-4,
     cubit_filename='dagmc.cub',
     geometry_details_filename='geometry_details.json',
     faceting_tolerance=1.0e-2,
