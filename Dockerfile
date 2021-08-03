@@ -67,16 +67,12 @@ RUN tar -xzvf svalinn-plugin_ubuntu-20.04_cubit_2021.5.tgz -C /opt/Coreform-Cubi
 
 # FROM dependencies as final
 
-RUN conda install -c conda-forge -c cadquery cadquery=2
-RUN conda install -c conda-forge moab
-RUN pip install paramak
 
 COPY setup.py setup.py
-
+COPY README.md README.md
+COPY run_tests.sh run_tests.sh
 COPY tests tests/
 COPY examples examples/
-COPY README.md README.md
 COPY cad_to_h5m cad_to_h5m/
 
 RUN python setup.py install
-
