@@ -2,28 +2,21 @@ import sys
 import os
 import json
 
-def stp_converter(
-    input_locations=[
-        {
-            'filename': 'part1.stp',
-            'material_tag': 'mat1'
-        },
-        # {
-        # },
-    ],
+def cad_to_h5m(
+    files_with_tags,
     h5m_filename='dagmc.h5m',
     cubit_path='/opt/Coreform-Cubit-2021.5/bin/',
     surface_reflectivity_name='reflective',
     merge_tolerance=1e4,
     cubit_filename='dagmc.cub',
     geometry_details_filename='geometry_details.json',
-    faceting_tolerance=1.0e-1
+    faceting_tolerance=1.0e-2
 ):
 
     sys.path.append(cubit_path)
     import cubit
     cubit.init([])
-    geometry_details = find_number_of_volumes_in_each_step_file(input_locations, cubit)
+    geometry_details = find_number_of_volumes_in_each_step_file(files_with_tags, cubit)
     print(geometry_details)
     tag_geometry_with_mats(geometry_details, cubit)
 
@@ -53,6 +46,21 @@ def imprint_and_merge_geometry(merge_tolerance, cubit):
     cubit.cmd("merge tolerance " + str(merge_tolerance))  # optional as there is a default
     cubit.cmd("merge vol all group_results")
     cubit.cmd("graphics tol angle 3")
+
+
+def find_all_surfaces_of_reflecting_wedge(new_vols, cubit):
+    surfaces_in_volume = cubit.parse_cubit_list("surface", " in volume "+' '.join(new_vols))
+    surface_info_dict = {}
+    for surface_id in surfaces_in_volume:
+        surface = cubit.surface(surface_id)
+        #area = surface.area()
+        vertex_in_surface = cubit.parse_cubit_list("vertex", " in surface " + str(surface_id))
+        if surface.is_planar() == True and len(vertex_in_surface) == 4:
+            surface_info_dict[surface_id] = {'reflector': True}
+        else:
+            surface_info_dict[surface_id] = {'reflector': False}
+    print('surface_info_dict', surface_info_dict)
+    return surface_info_dict
 
 def find_reflecting_surfaces_of_reflecting_wedge(geometry_details, surface_reflectivity_name, cubit):
     print('running find_reflecting_surfaces_of_reflecting_wedge')
@@ -93,12 +101,14 @@ def tag_geometry_with_mats(geometry_details, cubit):
         else:
             print('material_key_name', 'material_tag', 'not found for', entry)
 
-def find_number_of_volumes_in_each_step_file(input_locations, cubit):
+def find_number_of_volumes_in_each_step_file(files_with_tags, cubit):
+    """
+    """
     body_ids = ""
     volumes_in_each_step_file = []
     # all_groups=cubit.parse_cubit_list("group","all")
     # starting_group_id = len(all_groups)
-    for entry in input_locations:
+    for entry in files_with_tags:
         # starting_group_id = starting_group_id +1
         current_vols = cubit.parse_cubit_list("volume", "all")
         #print(os.path.join(basefolder, entry['filename']))
@@ -135,7 +145,6 @@ def find_number_of_volumes_in_each_step_file(input_locations, cubit):
         new_vols_after_unite = set(
             current_vols).symmetric_difference(set(all_vols))
         new_vols_after_unite = list(map(str, new_vols_after_unite))
-        # cubit.cmd('group '+str(starting_group_id)+' copy rotate 45 about z repeat 7')
         entry["volumes"] = new_vols_after_unite
         cubit.cmd(
             'group "' +
@@ -143,9 +152,8 @@ def find_number_of_volumes_in_each_step_file(input_locations, cubit):
             '" add volume ' +
             " ".join(
                 entry["volumes"]))
-        # cubit.cmd('volume in group '+str(starting_group_id)+' copy rotate 45 about z repeat 7')
         if 'surface_reflectivity' in entry.keys():
-            entry['surface_reflectivity'] = find_all_surfaces_of_reflecting_wedge(new_vols_after_unite)
+            entry['surface_reflectivity'] = find_all_surfaces_of_reflecting_wedge(new_vols_after_unite, cubit)
             print("entry['surface_reflectivity']", entry['surface_reflectivity'])
     cubit.cmd("separate body all")
-    return input_locations
+    return files_with_tags
