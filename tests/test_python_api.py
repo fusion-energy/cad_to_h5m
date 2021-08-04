@@ -13,12 +13,12 @@ class TestExtrudeCircleShape(unittest.TestCase):
 
     def setUp(self):
         
-        if not Path('dagmc_small_faceting_tolerance.h5m').is_file():
+        if not Path('tests/v0.0.1.tar.gz').is_file():
             url = 'https://github.com/Shimwell/fusion_example_for_openmc_using_paramak/archive/refs/tags/v0.0.1.tar.gz'
             urllib.request.urlretrieve(url, 'v0.0.1.tar.gz')
 
         tar = tarfile.open('v0.0.1.tar.gz', "r:gz")
-        tar.extractall()
+        tar.extractall('tests')
         tar.close()
 
 
@@ -31,7 +31,7 @@ class TestExtrudeCircleShape(unittest.TestCase):
         cad_to_h5m(
             files_with_tags=[
                 {
-                    'filename':'fusion_example_for_openmc_using_paramak-0.0.1/stp_files/blanket.stp',
+                    'filename':'tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/blanket.stp',
                     'material_tag': 'mat1'
                 }
             ],
@@ -55,7 +55,7 @@ class TestExtrudeCircleShape(unittest.TestCase):
         cad_to_h5m(
             files_with_tags=[
                 {
-                    'filename':'fusion_example_for_openmc_using_paramak-0.0.1/stp_files/blanket.stp',
+                    'filename':'tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/blanket.stp',
                     'material_tag': 'mat1'
                 }
             ],
@@ -73,7 +73,7 @@ class TestExtrudeCircleShape(unittest.TestCase):
         cad_to_h5m(
             files_with_tags=[
                 {
-                    'filename':'fusion_example_for_openmc_using_paramak-0.0.1/stp_files/blanket.stp',
+                    'filename':'tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/blanket.stp',
                     'material_tag': 'mat1'
                 }
             ],
@@ -91,7 +91,7 @@ class TestExtrudeCircleShape(unittest.TestCase):
         cad_to_h5m(
             files_with_tags=[
                 {
-                    'filename':'fusion_example_for_openmc_using_paramak-0.0.1/stp_files/blanket.stp',
+                    'filename':'tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/blanket.stp',
                     'material_tag': 'mat1'
                 }
             ],
@@ -104,7 +104,7 @@ class TestExtrudeCircleShape(unittest.TestCase):
         cad_to_h5m(
             files_with_tags=[
                 {
-                    'filename':'fusion_example_for_openmc_using_paramak-0.0.1/stp_files/blanket.stp',
+                    'filename':'tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/blanket.stp',
                     'material_tag': 'mat1'
                 }
             ],
