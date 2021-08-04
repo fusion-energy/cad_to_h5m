@@ -127,3 +127,29 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Cubit lisense file
+license.lic
+
+# CAD files used for testing
+*.stp
+
+# dagmc plugin for cubit
+*.tgz
+
+# output files from cubit
+*.jou
+*.cub
+*.cub5
+*.h5m
+
+# outputs from paramak
+geometry_details.json
+manifest.json
+
+# outputs from paramak-neutronics
+*.vtk
+
+# downloaded compressed stp files for testing
+*.tar.gz
+fusion_example_for_openmc_using_paramak-0.0.1/
