@@ -18,5 +18,6 @@ jobs:
       - name: Build and test with Docker
         run: |
           printf '${{ github.license_file }}' >> license.lic
+          cat license.lic
           docker build -t cad_to_h5m .
           docker run --rm cad_to_h5m  /bin/bash -c "bash run_tests.sh"
