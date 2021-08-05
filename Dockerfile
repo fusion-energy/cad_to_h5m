@@ -59,11 +59,11 @@ RUN dpkg -i coreform-cubit-2021.5.deb
 
 
 # makes a python file and trys to import cubit
-RUN printf 'import sys\nsys.path.append("/opt/Coreform-Cubit-2021.5/bin/")\nimport cubit\ncubit.init([])\n' >> test_cubit_import.py
+# RUN printf 'import sys\nsys.path.append("/opt/Coreform-Cubit-2021.5/bin/")\nimport cubit\ncubit.init([])\n' >> test_cubit_import.py
 
 # writes a non commercial license file
-RUN printf 'Fri May 28 2021' >> test_cubit_import.py
-COPY license.lic /opt/Coreform-Cubit-2021.5/bin/licenses/license.lic
+RUN printf 'Fri May 28 2021' >> /opt/Coreform-Cubit-2021.5/bin/licenses/license.lic
+
 
 
 RUN wget https://github.com/svalinn/Cubit-plugin/releases/download/0.1.0/svalinn-plugin_ubuntu-20.04_cubit_2021.5.tgz
