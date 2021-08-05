@@ -9,7 +9,7 @@ import pytest
 from cad_to_h5m import cad_to_h5m
 
 
-class TestExtrudeCircleShape(unittest.TestCase):
+class TestApiUsage(unittest.TestCase):
 
     def setUp(self):
         

@@ -57,31 +57,6 @@ RUN apt-get install -y libxcb-xinerama0
 # install cubit
 RUN dpkg -i coreform-cubit-2021.5.deb
 
-
-# makes a python file and trys to import cubit
-# RUN printf 'import sys\nsys.path.append("/opt/Coreform-Cubit-2021.5/bin/")\nimport cubit\ncubit.init([])\n' >> test_cubit_import.py
-
-# writes a non commercial license file
-RUN printf 'Fri May 28 2021' >> /opt/Coreform-Cubit-2021.5/bin/licenses/license.lic
-
-
-
-RUN wget https://github.com/svalinn/Cubit-plugin/releases/download/0.1.0/svalinn-plugin_ubuntu-20.04_cubit_2021.5.tgz
-RUN tar -xzvf svalinn-plugin_ubuntu-20.04_cubit_2021.5.tgz -C /opt/Coreform-Cubit-2021.5
-
-# FROM dependencies as final
-
-
-COPY setup.py setup.py
-COPY README.md README.md
-COPY run_tests.sh run_tests.sh
-COPY tests tests/
-COPY examples examples/
-COPY cad_to_h5m cad_to_h5m/
-
-
-
-
 ENV PATH="/root/miniconda3/bin:${PATH}"
 ARG PATH="/root/miniconda3/bin:${PATH}"
 RUN apt-get update
@@ -98,4 +73,24 @@ RUN wget \
 RUN conda --version
 
 
+RUN wget https://github.com/svalinn/Cubit-plugin/releases/download/0.1.0/svalinn-plugin_ubuntu-20.04_cubit_2021.5.tgz
+RUN tar -xzvf svalinn-plugin_ubuntu-20.04_cubit_2021.5.tgz -C /opt/Coreform-Cubit-2021.5
+
+COPY setup.py setup.py
+COPY README.md README.md
+COPY run_tests.sh run_tests.sh
+COPY license.lic /opt/Coreform-Cubit-2021.5/bin/licenses/license.lic
+COPY tests tests/
+COPY examples examples/
+COPY cad_to_h5m cad_to_h5m/
+
 RUN python setup.py install
+
+# makes a python file and trys to import cubit
+# RUN printf 'import sys\nsys.path.append("/opt/Coreform-Cubit-2021.5/bin/")\nimport cubit\ncubit.init([])\n' >> test_cubit_import.py
+
+# import sys
+# cubit_path='/opt/Coreform-Cubit-2021.5/bin/'
+# sys.path.append(cubit_path)
+# import cubit
+# cubit.init([])
