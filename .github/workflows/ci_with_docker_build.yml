@@ -10,15 +10,15 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    ports:
+      # Opens ports needed for Cubit license server communication on the host
+      - 5053:5053
+      - 5119:5119
   
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-
-        ports:
-          # Opens ports needed for Cubit license server communication on the host
-          - 5053:5053
-          - 5119:5119
 
       - name: Build and test with Docker
         run: |
