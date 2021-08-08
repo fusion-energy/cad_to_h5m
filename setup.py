@@ -11,7 +11,7 @@ setuptools.setup(
     description="Converts CAD files to a DAGMC h5m file using Cubit",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/shimwell/cad_to_h5m",
+    url="https://github.com/fusion-energy/cad_to_h5m",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
