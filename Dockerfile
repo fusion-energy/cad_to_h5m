@@ -12,9 +12,9 @@
 
 
 # FROM continuumio/miniconda3:4.10.3 as dependencies
-# FROM continuumio/miniconda3:4.9.2 as dependencies
+FROM continuumio/miniconda3:4.9.2 as dependencies
 
-FROM ubuntu:20.04
+# FROM ubuntu:20.04
 
 
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8 \
@@ -57,31 +57,6 @@ RUN apt-get install -y libxcb-xinerama0
 # install cubit
 RUN dpkg -i coreform-cubit-2021.5.deb
 
-
-# makes a python file and trys to import cubit
-RUN printf 'import sys\nsys.path.append("/opt/Coreform-Cubit-2021.5/bin/")\nimport cubit\ncubit.init([])\n' >> test_cubit_import.py
-
-# writes a non commercial license file
-RUN printf 'Fri May 28 2021' >> test_cubit_import.py
-COPY license.lic /opt/Coreform-Cubit-2021.5/bin/licenses/license.lic
-
-
-RUN wget https://github.com/svalinn/Cubit-plugin/releases/download/0.1.0/svalinn-plugin_ubuntu-20.04_cubit_2021.5.tgz
-RUN tar -xzvf svalinn-plugin_ubuntu-20.04_cubit_2021.5.tgz -C /opt/Coreform-Cubit-2021.5
-
-# FROM dependencies as final
-
-
-COPY setup.py setup.py
-COPY README.md README.md
-COPY run_tests.sh run_tests.sh
-COPY tests tests/
-COPY examples examples/
-COPY cad_to_h5m cad_to_h5m/
-
-
-
-
 ENV PATH="/root/miniconda3/bin:${PATH}"
 ARG PATH="/root/miniconda3/bin:${PATH}"
 RUN apt-get update
@@ -89,13 +64,35 @@ RUN apt-get update
 RUN apt-get install -y wget && rm -rf /var/lib/apt/lists/*
 
 # install python 3.8
-RUN wget \
-    https://repo.anaconda.com/miniconda/Miniconda3-py38_4.10.3-Linux-x86_64.sh \
-    && mkdir /root/.conda \
-    && bash Miniconda3-py38_4.10.3-Linux-x86_64.sh -b \
-    && rm -f Miniconda3-py38_4.10.3-Linux-x86_64.sh 
+# RUN wget \
+#     https://repo.anaconda.com/miniconda/Miniconda3-py38_4.10.3-Linux-x86_64.sh \
+#     && mkdir /root/.conda \
+#     && bash Miniconda3-py38_4.10.3-Linux-x86_64.sh -b \
+#     && rm -f Miniconda3-py38_4.10.3-Linux-x86_64.sh 
 
-RUN conda --version
+# RUN conda --version
 
+COPY svalinn-plugin_debian-10.10_cubit_2021.5.tgz .
+# RUN wget https://github.com/svalinn/Cubit-plugin/releases/download/0.1.0/svalinn-plugin_ubuntu-20.04_cubit_2021.5.tgz
+RUN tar -xzvf svalinn-plugin_debian-10.10_cubit_2021.5.tgz -C /opt/Coreform-Cubit-2021.5
+
+RUN pip install pytest
+
+COPY setup.py setup.py
+COPY README.md README.md
+COPY run_tests.sh run_tests.sh
+COPY cad_to_h5m cad_to_h5m/
+COPY license.lic /opt/Coreform-Cubit-2021.5/bin/licenses/license.lic
+COPY tests tests/
+COPY examples examples/
 
 RUN python setup.py install
+
+# makes a python file and trys to import cubit
+# RUN printf 'import sys\nsys.path.append("/opt/Coreform-Cubit-2021.5/bin/")\nimport cubit\ncubit.init([])\n' >> test_cubit_import.py
+
+# import sys
+# cubit_path='/opt/Coreform-Cubit-2021.5/bin/'
+# sys.path.append(cubit_path)
+# import cubit
+# cubit.init([])

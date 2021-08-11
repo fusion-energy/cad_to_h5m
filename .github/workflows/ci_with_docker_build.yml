@@ -10,6 +10,11 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    # ports:
+    #   # Opens ports needed for Cubit license server communication on the host
+    #   - 5053:5053
+    #   - 5119:5119
   
     steps:
       - name: Checkout repository
@@ -18,5 +23,6 @@ jobs:
       - name: Build and test with Docker
         run: |
           printf '${{ github.license_file }}' >> license.lic
+          cat license.lic
           docker build -t cad_to_h5m .
-          docker run --rm cad_to_h5m  /bin/bash -c "bash run_tests.sh"
+          docker run --rm --network host cad_to_h5m  /bin/bash -c "bash run_tests.sh"
