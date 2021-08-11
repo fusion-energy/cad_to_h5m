@@ -15,8 +15,16 @@ def cad_to_h5m(
 ):
 
     sys.path.append(cubit_path)
-    import cubit
+
+    try:
+        import cubit
+    except ImportError:
+        msg = ('import cubit failed, cubit was not importable from the '
+               'provided path {cubit_path}')
+        raise ImportError(msg)
+
     cubit.init([])
+
     geometry_details = find_number_of_volumes_in_each_step_file(files_with_tags, cubit)
     print(geometry_details)
     tag_geometry_with_mats(geometry_details, cubit)
