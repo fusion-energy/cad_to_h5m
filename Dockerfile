@@ -81,8 +81,8 @@ RUN pip install pytest
 COPY setup.py setup.py
 COPY README.md README.md
 COPY run_tests.sh run_tests.sh
-COPY license.lic /opt/Coreform-Cubit-2021.5/bin/licenses/license.lic
 COPY cad_to_h5m cad_to_h5m/
+COPY license.lic /opt/Coreform-Cubit-2021.5/bin/licenses/license.lic
 COPY tests tests/
 COPY examples examples/
 

@@ -24,25 +24,27 @@ def cad_to_h5m(
     imprint_and_merge_geometry(merge_tolerance, cubit)
     find_reflecting_surfaces_of_reflecting_wedge(geometry_details, surface_reflectivity_name, cubit)
     save_output_files(make_watertight, geometry_details, h5m_filename, cubit_filename, geometry_details_filename, faceting_tolerance, cubit)
+    return h5m_filename
 
 def save_output_files(make_watertight, geometry_details, h5m_filename, cubit_filename, geometry_details_filename, faceting_tolerance, cubit):
     """This saves the output files"""
     cubit.cmd("set attribute on")
     # use a faceting_tolerance 1.0e-4 or smaller for accurate simulations
-    print('using faceting_tolerance of ', faceting_tolerance)
-    if make_watertight == True:
-        cubit.cmd('export dagmc "'+h5m_filename+'" faceting_tolerance '+ str(faceting_tolerance) + ' make_watertight')
-    else:
-        cubit.cmd('export dagmc "'+h5m_filename+'" faceting_tolerance '+ str(faceting_tolerance))
-
+    if geometry_details_filename is not None:
+        with open(geometry_details_filename, "w") as outfile:
+            json.dump(geometry_details, outfile, indent=4)
     # os.system('mbconvert -1 '+h5m_filename+' dagmc_not_watertight_edges.h5m')
     if cubit_filename is not None:
         cubit.cmd('save as "'+cubit_filename+'" overwrite')
     # if trelis_filename is not None:
     #     cubit.cmd('save as "'+trelis_filename+'" overwrite')
-    if geometry_details_filename is not None:
-        with open(geometry_details_filename, "w") as outfile:
-            json.dump(geometry_details, outfile, indent=4)
+
+    print('using faceting_tolerance of ', faceting_tolerance)
+    if make_watertight == True:
+        cubit.cmd('export dagmc "'+h5m_filename+'" faceting_tolerance '+ str(faceting_tolerance) + ' make_watertight')
+    else:
+        cubit.cmd('export dagmc "'+h5m_filename+'" faceting_tolerance '+ str(faceting_tolerance))
+    return h5m_filename
 
 
 def imprint_and_merge_geometry(merge_tolerance, cubit):
