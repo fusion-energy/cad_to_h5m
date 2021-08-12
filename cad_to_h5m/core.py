@@ -2,6 +2,8 @@ import sys
 import os
 import json
 
+from cadquery.occ_impl.shapes import T
+
 def cad_to_h5m(
     files_with_tags,
     h5m_filename='dagmc.h5m',
@@ -12,6 +14,7 @@ def cad_to_h5m(
     geometry_details_filename='geometry_details.json',
     faceting_tolerance=1.0e-2,
     make_watertight=True,
+    imprint=True
 ):
 
     sys.path.append(cubit_path)
@@ -21,7 +24,9 @@ def cad_to_h5m(
     print(geometry_details)
     tag_geometry_with_mats(geometry_details, cubit)
 
-    imprint_and_merge_geometry(merge_tolerance, cubit)
+    if imprint:
+        imprint_geometry(cubit)
+    merge_geometry(merge_tolerance, cubit)
     find_reflecting_surfaces_of_reflecting_wedge(geometry_details, surface_reflectivity_name, cubit)
     save_output_files(make_watertight, geometry_details, h5m_filename, cubit_filename, geometry_details_filename, faceting_tolerance, cubit)
     return h5m_filename
@@ -47,10 +52,12 @@ def save_output_files(make_watertight, geometry_details, h5m_filename, cubit_fil
     return h5m_filename
 
 
-def imprint_and_merge_geometry(merge_tolerance, cubit):
+def imprint_geometry(cubit):
     cubit.cmd("imprint body all")
-    print('using merge_tolerance of ', str(merge_tolerance))
-    cubit.cmd("merge tolerance " + str(merge_tolerance))  # optional as there is a default
+
+
+def merge_geometry(merge_tolerance, cubit):
+    cubit.cmd(f"merge tolerance {merge_tolerance}")  # optional as there is a default
     cubit.cmd("merge vol all group_results")
     cubit.cmd("graphics tol angle 3")
 

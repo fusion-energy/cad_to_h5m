@@ -57,6 +57,6 @@ cad_to_h5m(
             "filename": "fusion_example_for_openmc_using_paramak-0.0.1/stp_files/graveyard.stp",
         }
     ],
-    h5m_filename=' "fusion_example_for_openmc_using_paramak-0.0.1/stp_files/gmc.h5m',
+    h5m_filename=' "fusion_example_for_openmc_using_paramak-0.0.1/stp_files/dagmc.h5m',
     cubit_path='/opt/Coreform-Cubit-2021.5/bin/'
 )
