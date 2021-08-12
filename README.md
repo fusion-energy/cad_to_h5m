@@ -10,10 +10,10 @@ into a DAGMC h5m file using the Cubit Python API.
 This is useful for creating the DAGMC geometry for use in compatible neutronics
 codes such as OpenMC, FLUKA and MCNP.
 
-The geometry is imprinting or merging during the process which can speed up
-particle transport.
+The geometry is tagged wih material names, optional imprinted and merging
+during the process which can speed up particle transport.
 
-
+<!-- 
 # Command line usage
 
 Perhaps the most common use of this program is to convert a STP file into
@@ -40,7 +40,7 @@ It is also possible to convert .sat files in the following way.
 
 ```bash
 cad-to-h5m -i part1.sat -o dagmc.h5m -t mat:1 -c /opt/Coreform-Cubit-2020.2/bin/python3/
-```
+``` -->
 
 # Python API usage
 
@@ -48,10 +48,10 @@ Creating a h5m file from a single STP file called ```part1.stp``` and applying
 a material tag to the volume.
 
 ```python
-from cad_to_h5m import stp_converter
+from cad_to_h5m import cad_to_h5m
 
-stp_converter(
-    input='part1.stp',
+cad_to_h5m(
+    files_with_tags={'filename':'part1.stp', 'material_tags':'m1'},
     output='dagmc.h5m',
     tags='mat:1',
     cubit_path='/opt/Coreform-Cubit-2020.2/bin/python3/'
@@ -63,23 +63,27 @@ Both parts have distinct material tag applied to them and the result is output
 as a h5m file.
 
 ```python
-from cad_to_h5m import stp_converter
+from cad_to_h5m import cad_to_h5m
 
-stp_converter(
-    input=['part1.stp', 'part2.stp'],
+cad_to_h5m(
+    files_with_tags={
+        'filename':'part1.stp', 'material_tags':'m1'
+        'filename':'part2.stp', 'material_tags':'m2'
+    },
     output='dagmc.h5m',
     tags=['mat:1', 'mat:2'],
     cubit_path='/opt/Coreform-Cubit-2020.2/bin/python3/'
 )
 ```
 
-Creating a h5m file from a single SAT is a similar process.
+Creating a h5m file from a single SAT is a similar process. Note the .sat file
+extension.
 
 ```python
-from cad_to_h5m import sat_converter
+from cad_to_h5m import cad_to_h5m
 
-sat_converter(
-    input='part1.sat',
+cad_to_h5m(
+    files_with_tags={'filename':'part1.sat', 'material_tags':'m1'},,
     output='dagmc.h5m',
     tags='mat:1',
     cubit_path='/opt/Coreform-Cubit-2020.2/bin/python3/'
@@ -94,4 +98,5 @@ method of installing is via pip.
 pip install cad_to_h5m
 ```
 
-Some Python dependencies (such as Numpy) are installed during the ```pip install cad_to_h5m``` process, however [Cubit](https://coreform.com/products/coreform-cubit/) needs to be installed seperatly to make full use of this package.
+Some Python dependencies (such as Numpy) are installed during the ```pip install cad_to_h5m``` process, however [Cubit](https://coreform.com/products/coreform-cubit/) needs
+to be installed seperatly to make full use of this package.
