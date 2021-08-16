@@ -58,8 +58,7 @@ class TestApiUsage(unittest.TestCase):
                 {
                     "filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/blanket.stp",
                     "material_tag": "mat1",
-                }
-            ],
+                }],
             h5m_filename="dagmc.h5m",
             make_watertight=True,
         )
@@ -76,8 +75,7 @@ class TestApiUsage(unittest.TestCase):
                 {
                     "filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/blanket.stp",
                     "material_tag": "mat1",
-                }
-            ],
+                }],
             cubit_filename="dagmc.cub",
         )
 
@@ -93,8 +91,7 @@ class TestApiUsage(unittest.TestCase):
                 {
                     "filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/blanket.stp",
                     "material_tag": "mat1",
-                }
-            ],
+                }],
             h5m_filename="dagmc_default_faceting_tolerance.h5m",
             faceting_tolerance=1.0e-2,
         )
@@ -106,8 +103,7 @@ class TestApiUsage(unittest.TestCase):
                 {
                     "filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/blanket.stp",
                     "material_tag": "mat1",
-                }
-            ],
+                }],
             h5m_filename="dagmc_small_faceting_tolerance.h5m",
             faceting_tolerance=0.5e-2,
         )
@@ -129,9 +125,7 @@ class TestApiUsage(unittest.TestCase):
                 {
                     "filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/pf_coils.stp",
                     "material_tag": "mat1",
-                    "tet_mesh": "size 3"
-                }
-            ],
+                    "tet_mesh": "size 3"}],
             exo_filename="umesh_3.exo",
         )
 
@@ -144,18 +138,14 @@ class TestApiUsage(unittest.TestCase):
                 {
                     "filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/pf_coils.stp",
                     "material_tag": "mat1",
-                    "tet_mesh": "size 10"
-                }
-            ],
+                    "tet_mesh": "size 10"}],
             exo_filename="umesh_10.exo",
         )
 
         assert Path("umesh_10.exo").is_file()
 
-        assert (
-            Path("umesh_10.exo").stat().st_size > Path("umesh_3.exo").stat().st_size
-        )
-
+        assert (Path("umesh_10.exo").stat().st_size >
+                Path("umesh_3.exo").stat().st_size)
 
     def test_exo_file_creation_with_default_size(self):
         """Checks that a h5m file is created from stp files"""
@@ -167,9 +157,7 @@ class TestApiUsage(unittest.TestCase):
                 {
                     "filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/pf_coils.stp",
                     "material_tag": "mat1",
-                    "tet_mesh": ""
-                }
-            ],
+                    "tet_mesh": ""}],
             exo_filename="umesh_default.exo",
         )
 
