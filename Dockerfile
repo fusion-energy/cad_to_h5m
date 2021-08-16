@@ -11,10 +11,8 @@
 # docker run -it cubit_docker
 
 
-# FROM continuumio/miniconda3:4.10.3 as dependencies
+# contains python 3.8
 FROM continuumio/miniconda3:4.9.2 as dependencies
-
-# FROM ubuntu:20.04
 
 
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8 \
@@ -58,11 +56,9 @@ RUN apt-get install -y libxcb-xinerama0
 # install cubit
 RUN dpkg -i coreform-cubit-2021.5.deb
 
-ENV PATH="/root/miniconda3/bin:${PATH}"
-ARG PATH="/root/miniconda3/bin:${PATH}"
 RUN apt-get update
 
-RUN apt-get install -y wget && rm -rf /var/lib/apt/lists/*
+RUN apt-get install -y wget
 
 RUN wget https://github.com/Shimwell/Cubit-plugin/releases/download/v0.6.0/svalinn-plugin_debian-10.10_cubit_2021.5.tgz
 # this will be downloaded from the main release when avaialbe
@@ -78,6 +74,6 @@ COPY cad_to_h5m cad_to_h5m/
 # todo make a build arg to allow local copy
 # COPY license.lic /opt/Coreform-Cubit-2021.5/bin/licenses/license.lic
 COPY tests tests/
-COPY examples examples/
+COPY examples/*.py examples/
 
 RUN python setup.py install
