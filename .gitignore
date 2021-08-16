@@ -142,6 +142,7 @@ license.lic
 *.cub
 *.cub5
 *.h5m
+*.exo
 
 # outputs from paramak
 geometry_details.json
