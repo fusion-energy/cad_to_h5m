@@ -2,7 +2,6 @@ import sys
 import os
 import json
 from typing import Dict, List, TypedDict
-from cadquery.occ_impl.shapes import T
 
 
 class FilesWithTags(TypedDict):
