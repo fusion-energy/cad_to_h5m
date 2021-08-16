@@ -1,4 +1,3 @@
-
 import paramak
 
 shape = paramak.Plasma(
@@ -9,5 +8,5 @@ shape = paramak.Plasma(
     rotation_angle=90,
 )
 
-print(shape.neutronics_description())
-shape.export_h5m_with_cubit()
+# this function makes up of cad_to_h5m within the paramak
+my_reactor.export_h5m_with_cubit()

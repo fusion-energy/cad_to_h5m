@@ -21,5 +21,5 @@ setuptools.setup(
     tests_require=[
         "pytest",
     ],
-    install_requires=["pytest"  ]
+    install_requires=["pytest"],
 )
