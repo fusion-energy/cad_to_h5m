@@ -19,7 +19,7 @@ during the process which can speed up particle transport.
 Perhaps the most common use of this program is to convert a STP file into
 DAGMC geometry.
 ```bash
-cad-to-h5m -i part1.stp -o dagmc.h5m -t mat:1 -c /opt/Coreform-Cubit-2020.2/bin/python3/
+cad-to-h5m -i part1.stp -o dagmc.h5m -t mat:1 -c /opt/Coreform-Cubit-2021.5/bin/
 ```
 
 - the ```-i``` or ```--input``` argument specifies the input CAD filename(s)
@@ -33,13 +33,13 @@ geometry. This example combines two STP files into a single geometry with
 seperate material tags for each STP file and saves the result as a h5m file.
 
 ```bash
-cad-to-h5m -i part1.stp part2.stp -o dagmc.h5m -t mat:1 mat:2 -c /opt/Coreform-Cubit-2020.2/bin/python3/
+cad-to-h5m -i part1.stp part2.stp -o dagmc.h5m -t mat:1 mat:2 -c /opt/Coreform-Cubit-2021.5/bin/
 ```
 
 It is also possible to convert .sat files in the following way.
 
 ```bash
-cad-to-h5m -i part1.sat -o dagmc.h5m -t mat:1 -c /opt/Coreform-Cubit-2020.2/bin/python3/
+cad-to-h5m -i part1.sat -o dagmc.h5m -t mat:1 -c /opt/Coreform-Cubit-2021.5/bin/
 ``` -->
 
 # Python API usage
@@ -54,7 +54,7 @@ cad_to_h5m(
     files_with_tags={'filename':'part1.stp', 'material_tags':'m1'},
     output='dagmc.h5m',
     tags='mat:1',
-    cubit_path='/opt/Coreform-Cubit-2020.2/bin/python3/'
+    cubit_path='/opt/Coreform-Cubit-2021.5/bin/'
 )
 ```
 
@@ -72,7 +72,7 @@ cad_to_h5m(
     },
     output='dagmc.h5m',
     tags=['mat:1', 'mat:2'],
-    cubit_path='/opt/Coreform-Cubit-2020.2/bin/python3/'
+    cubit_path='/opt/Coreform-Cubit-2021.5/bin/'
 )
 ```
 
@@ -83,10 +83,30 @@ extension.
 from cad_to_h5m import cad_to_h5m
 
 cad_to_h5m(
-    files_with_tags={'filename':'part1.sat', 'material_tags':'m1'},,
+    files_with_tags={'filename':'part1.sat', 'material_tags':'m1'},
     output='dagmc.h5m',
     tags='mat:1',
-    cubit_path='/opt/Coreform-Cubit-2020.2/bin/python3/'
+    cubit_path='/opt/Coreform-Cubit-2021.5/bin/'
+)
+```
+
+Creating a EXODUS mesh files compatible with the DAGMC Unstructured  mesh format
+is also possible. Another entry must be added to the ```files_with_tags```
+argument. The following command will produce a ```unstructured_mesh_file.exo```
+file that can then be used in DAGMC compatable neutronics codes. There are examples
+[1](https://docs.openmc.org/en/latest/examples/unstructured-mesh-part-i.html)
+[2](https://docs.openmc.org/en/latest/examples/unstructured-mesh-part-ii.html) 
+for the use of unstructured meshes in OpenMC.
+
+```python
+from cad_to_h5m import cad_to_h5m
+
+cad_to_h5m(
+    files_with_tags={'filename':'part1.sat', 'material_tags':'m1', 'tet_mesh': 'size 0.5'},
+    output='dagmc.h5m',
+    tags='mat:1',
+    cubit_path='/opt/Coreform-Cubit-2021.5/bin/'
+    exo_filename='unstructured_mesh_file.exo'
 )
 ```
 
