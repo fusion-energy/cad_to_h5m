@@ -118,3 +118,59 @@ class TestApiUsage(unittest.TestCase):
             Path("dagmc_small_faceting_tolerance.h5m").stat().st_size
             > Path("dagmc_default_faceting_tolerance.h5m").stat().st_size
         )
+
+    def test_exo_file_creation_with_different_sizes(self):
+        """Checks that a h5m file is created from stp files"""
+
+        os.system("rm umesh_3.exo")
+
+        cad_to_h5m(
+            files_with_tags=[
+                {
+                    "filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/pf_coils.stp",
+                    "material_tag": "mat1",
+                    "tet_mesh": "size 3"
+                }
+            ],
+            exo_filename="umesh_3.exo",
+        )
+
+        assert Path("umesh_3.exo").is_file()
+
+        os.system("rm umesh_10.exo")
+
+        cad_to_h5m(
+            files_with_tags=[
+                {
+                    "filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/pf_coils.stp",
+                    "material_tag": "mat1",
+                    "tet_mesh": "size 10"
+                }
+            ],
+            exo_filename="umesh_10.exo",
+        )
+
+        assert Path("umesh_10.exo").is_file()
+
+        assert (
+            Path("umesh_10.exo").stat().st_size > Path("umesh_3.exo").stat().st_size
+        )
+
+
+    def test_exo_file_creation_with_default_size(self):
+        """Checks that a h5m file is created from stp files"""
+
+        os.system("rm umesh_default.exo")
+
+        cad_to_h5m(
+            files_with_tags=[
+                {
+                    "filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/pf_coils.stp",
+                    "material_tag": "mat1",
+                    "tet_mesh": ""
+                }
+            ],
+            exo_filename="umesh_default.exo",
+        )
+
+        assert Path("umesh_default.exo").is_file()
