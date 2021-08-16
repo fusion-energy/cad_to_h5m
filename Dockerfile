@@ -63,36 +63,20 @@ RUN apt-get update
 
 RUN apt-get install -y wget && rm -rf /var/lib/apt/lists/*
 
-# install python 3.8
-# RUN wget \
-#     https://repo.anaconda.com/miniconda/Miniconda3-py38_4.10.3-Linux-x86_64.sh \
-#     && mkdir /root/.conda \
-#     && bash Miniconda3-py38_4.10.3-Linux-x86_64.sh -b \
-#     && rm -f Miniconda3-py38_4.10.3-Linux-x86_64.sh 
+RUN wget https://github.com/Shimwell/Cubit-plugin/releases/download/v0.6.0/svalinn-plugin_debian-10.10_cubit_2021.5.tgz
+# this will be downloaded from the main release when avaialbe
 
-# RUN conda --version
-
-COPY svalinn-plugin_debian-10.10_cubit_2021.5.tgz .
-# RUN wget https://github.com/svalinn/Cubit-plugin/releases/download/0.1.0/svalinn-plugin_ubuntu-20.04_cubit_2021.5.tgz
 RUN tar -xzvf svalinn-plugin_debian-10.10_cubit_2021.5.tgz -C /opt/Coreform-Cubit-2021.5
 
-RUN pip install pytest
+FROM dependencies as final
 
 COPY setup.py setup.py
 COPY README.md README.md
 COPY run_tests.sh run_tests.sh
 COPY cad_to_h5m cad_to_h5m/
-COPY license.lic /opt/Coreform-Cubit-2021.5/bin/licenses/license.lic
+# todo make a build arg to allow local copy
+# COPY license.lic /opt/Coreform-Cubit-2021.5/bin/licenses/license.lic
 COPY tests tests/
 COPY examples examples/
 
 RUN python setup.py install
-
-# makes a python file and trys to import cubit
-# RUN printf 'import sys\nsys.path.append("/opt/Coreform-Cubit-2021.5/bin/")\nimport cubit\ncubit.init([])\n' >> test_cubit_import.py
-
-# import sys
-# cubit_path='/opt/Coreform-Cubit-2021.5/bin/'
-# sys.path.append(cubit_path)
-# import cubit
-# cubit.init([])

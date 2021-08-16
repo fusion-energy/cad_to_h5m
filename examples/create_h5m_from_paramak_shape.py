@@ -1,7 +1,6 @@
-
 import paramak
 
-shape = paramak.Plasma(
+my_shape = paramak.Plasma(
     major_radius=620,
     minor_radius=210,
     triangularity=0.33,
@@ -9,5 +8,5 @@ shape = paramak.Plasma(
     rotation_angle=90,
 )
 
-print(shape.neutronics_description())
-shape.export_h5m_with_cubit()
+# this function makes up of cad_to_h5m within the paramak
+my_shape.export_h5m_with_cubit()

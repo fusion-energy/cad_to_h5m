@@ -1,16 +1,19 @@
-
 from cad_to_h5m import cad_to_h5m
 import urllib.request
 import tarfile
 
-url = 'https://github.com/Shimwell/fusion_example_for_openmc_using_paramak/archive/refs/tags/v0.0.1.tar.gz'
-urllib.request.urlretrieve(url, 'v0.0.1.tar.gz')
+# this downloads a ready made geometry
+url = "https://github.com/Shimwell/fusion_example_for_openmc_using_paramak/archive/refs/tags/v0.0.1.tar.gz"
+urllib.request.urlretrieve(url, "v0.0.1.tar.gz")
 
-tar = tarfile.open('v0.0.1.tar.gz', "r:gz")
+# uncompresses the geometry
+tar = tarfile.open("v0.0.1.tar.gz", "r:gz")
 tar.extractall()
 tar.close()
 
 cad_to_h5m(
+    h5m_filename=' "dagmc.h5m',
+    cubit_path="/opt/Coreform-Cubit-2021.5/bin/",
     files_with_tags=[
         {
             "material_tag": "pf_coil_mat",
@@ -55,8 +58,6 @@ cad_to_h5m(
         {
             "material_tag": "graveyard",
             "filename": "fusion_example_for_openmc_using_paramak-0.0.1/stp_files/graveyard.stp",
-        }
+        },
     ],
-    h5m_filename=' "fusion_example_for_openmc_using_paramak-0.0.1/stp_files/dagmc.h5m',
-    cubit_path='/opt/Coreform-Cubit-2021.5/bin/'
 )
