@@ -64,7 +64,8 @@ def cad_to_h5m(
 
     cubit.init([])
 
-    geometry_details = find_number_of_volumes_in_each_step_file(files_with_tags, cubit)
+    geometry_details = find_number_of_volumes_in_each_step_file(
+        files_with_tags, cubit)
     print(geometry_details)
     tag_geometry_with_mats(geometry_details, cubit)
 
@@ -108,7 +109,7 @@ def save_output_files(
     #     cubit.cmd('save as "'+trelis_filename+'" overwrite')
 
     print("using faceting_tolerance of ", faceting_tolerance)
-    if make_watertight == True:
+    if make_watertight:
         cubit.cmd(
             'export dagmc "'
             + h5m_filename
@@ -131,7 +132,8 @@ def imprint_geometry(cubit):
 
 
 def merge_geometry(merge_tolerance, cubit):
-    cubit.cmd(f"merge tolerance {merge_tolerance}")  # optional as there is a default
+    # optional as there is a default
+    cubit.cmd(f"merge tolerance {merge_tolerance}")
     cubit.cmd("merge vol all group_results")
     cubit.cmd("graphics tol angle 3")
 
@@ -147,7 +149,7 @@ def find_all_surfaces_of_reflecting_wedge(new_vols, cubit):
         vertex_in_surface = cubit.parse_cubit_list(
             "vertex", " in surface " + str(surface_id)
         )
-        if surface.is_planar() == True and len(vertex_in_surface) == 4:
+        if surface.is_planar() and len(vertex_in_surface) == 4:
             surface_info_dict[surface_id] = {"reflector": True}
         else:
             surface_info_dict[surface_id] = {"reflector": False}
@@ -173,7 +175,7 @@ def find_reflecting_surfaces_of_reflecting_wedge(
             )
             print("surfaces_in_wedge_volume", surfaces_in_wedge_volume)
             for surface_id in surface_info_dict.keys():
-                if surface_info_dict[surface_id]["reflector"] == True:
+                if surface_info_dict[surface_id]["reflector"]:
                     print(
                         surface_id,
                         "surface originally reflecting but does it still exist",
@@ -220,7 +222,8 @@ def find_number_of_volumes_in_each_step_file(files_with_tags, cubit):
         # print(os.path.join(basefolder, entry['filename']))
         if entry["filename"].endswith(".sat"):
             import_type = "acis"
-        if entry["filename"].endswith(".stp") or entry["filename"].endswith(".step"):
+        if entry["filename"].endswith(
+                ".stp") or entry["filename"].endswith(".step"):
             import_type = "step"
         short_file_name = os.path.split(entry["filename"])[-1]
         # print('short_file_name',short_file_name)
@@ -242,19 +245,26 @@ def find_number_of_volumes_in_each_step_file(files_with_tags, cubit):
         # print('volumes_in_group',volumes_in_group,type(volumes_in_group))
         if len(new_vols) > 1:
             cubit.cmd(
-                "unite vol " + " ".join(new_vols) + " with vol " + " ".join(new_vols)
-            )
+                "unite vol " +
+                " ".join(new_vols) +
+                " with vol " +
+                " ".join(new_vols))
         all_vols = cubit.parse_cubit_list("volume", "all")
-        new_vols_after_unite = set(current_vols).symmetric_difference(set(all_vols))
+        new_vols_after_unite = set(
+            current_vols).symmetric_difference(set(all_vols))
         new_vols_after_unite = list(map(str, new_vols_after_unite))
         entry["volumes"] = new_vols_after_unite
         cubit.cmd(
-            'group "' + short_file_name + '" add volume ' + " ".join(entry["volumes"])
-        )
+            'group "' +
+            short_file_name +
+            '" add volume ' +
+            " ".join(
+                entry["volumes"]))
         if "surface_reflectivity" in entry.keys():
             entry["surface_reflectivity"] = find_all_surfaces_of_reflecting_wedge(
-                new_vols_after_unite, cubit
-            )
-            print("entry['surface_reflectivity']", entry["surface_reflectivity"])
+                new_vols_after_unite, cubit)
+            print(
+                "entry['surface_reflectivity']",
+                entry["surface_reflectivity"])
     cubit.cmd("separate body all")
     return files_with_tags
