@@ -1,7 +1,12 @@
 [![N|Python](https://www.python.org/static/community_logos/python-powered-w-100x40.png)](https://www.python.org)
-[![docker based CI](https://github.com/svalinn/cad_to_h5m/actions/workflows/docker_ci.yml/badge.svg)](https://github.com/svalinn/cad_to_h5m/actions/workflows/docker_ci.yml)
+
+[![CircleCI](https://circleci.com/gh/fusion-energy/cad_to_h5m/tree/main.svg?style=svg)](https://circleci.com/gh/fusion-energy/cad_to_h5m/tree/main) [![docker based CI](https://github.com/fusion-energy/cad_to_h5m/actions/workflows/docker_ci.yml/badge.svg)](https://github.com/fusion-energy/cad_to_h5m/actions/workflows/docker_ci.yml)
+
 [![PyPI](https://img.shields.io/pypi/v/cad-to-h5m?color=brightgreen&label=pypi&logo=grebrightgreenen&logoColor=green)](https://pypi.org/project/cad-to-h5m/)
-[![codecov](https://codecov.io/gh/svalinn/cad_to_h5m/branch/main/graph/badge.svg)](https://codecov.io/gh/svalinn/cad_to_h5m)
+
+[![codecov](https://codecov.io/gh/fusion-energy/cad_to_h5m/branch/main/graph/badge.svg)](https://codecov.io/gh/svalinn/cad_to_h5m)
+
+[![docker-publish-release](https://github.com/fusion-energy/cad_to_h5m/actions/workflows/docker_publish.yml/badge.svg)](https://github.com/fusion-energy/cad_to_h5m/actions/workflows/docker_publish.yml)
 
 This is a minimal Python package that provides both **command line** and
 **API** interfaces for converting **multiple** CAD files (STP and SAT format)
