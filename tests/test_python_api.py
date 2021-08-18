@@ -58,8 +58,7 @@ class TestApiUsage(unittest.TestCase):
                 {
                     "filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/blanket.stp",
                     "material_tag": "mat1",
-                }
-            ],
+                }],
             h5m_filename="dagmc.h5m",
             make_watertight=True,
         )
@@ -76,8 +75,7 @@ class TestApiUsage(unittest.TestCase):
                 {
                     "filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/blanket.stp",
                     "material_tag": "mat1",
-                }
-            ],
+                }],
             cubit_filename="dagmc.cub",
         )
 
@@ -93,8 +91,7 @@ class TestApiUsage(unittest.TestCase):
                 {
                     "filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/blanket.stp",
                     "material_tag": "mat1",
-                }
-            ],
+                }],
             h5m_filename="dagmc_default_faceting_tolerance.h5m",
             faceting_tolerance=1.0e-2,
         )
@@ -106,8 +103,7 @@ class TestApiUsage(unittest.TestCase):
                 {
                     "filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/blanket.stp",
                     "material_tag": "mat1",
-                }
-            ],
+                }],
             h5m_filename="dagmc_small_faceting_tolerance.h5m",
             faceting_tolerance=0.5e-2,
         )

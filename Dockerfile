@@ -10,11 +10,9 @@
 # To run the resulting Docker image:
 # docker run -it cubit_docker
 
-
-# FROM continuumio/miniconda3:4.10.3 as dependencies
+# Python 3.8 image, Cubit don't support python 3.9 currently
 FROM continuumio/miniconda3:4.9.2 as dependencies
 
-# FROM ubuntu:20.04
 
 
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8 \
@@ -81,3 +79,7 @@ COPY tests tests/
 COPY examples examples/
 
 RUN python setup.py install
+
+RUN useradd --create-home --shell /bin/bash coreform
+USER coreform
+WORKDIR /home/coreform
