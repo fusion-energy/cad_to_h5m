@@ -57,7 +57,7 @@ from cad_to_h5m import cad_to_h5m
 
 cad_to_h5m(
     files_with_tags={'filename':'part1.stp', 'material_tags':'m1'},
-    output='dagmc.h5m',
+    h5m_filename='dagmc.h5m',
     tags='mat:1',
     cubit_path='/opt/Coreform-Cubit-2021.5/bin/'
 )
@@ -65,7 +65,7 @@ cad_to_h5m(
 
 Creating a h5m file from two STP files called ```part1.stp``` and ```part2.stp```.
 Both parts have distinct material tag applied to them and the result is output
-as a h5m file.
+as a h5m file with the filename dagmc.h5m.
 
 ```python
 from cad_to_h5m import cad_to_h5m
@@ -75,8 +75,7 @@ cad_to_h5m(
         'filename':'part1.stp', 'material_tags':'m1'
         'filename':'part2.stp', 'material_tags':'m2'
     },
-    output='dagmc.h5m',
-    tags=['mat:1', 'mat:2'],
+    h5m_filename='dagmc.h5m',
     cubit_path='/opt/Coreform-Cubit-2021.5/bin/'
 )
 ```
@@ -89,8 +88,7 @@ from cad_to_h5m import cad_to_h5m
 
 cad_to_h5m(
     files_with_tags={'filename':'part1.sat', 'material_tags':'m1'},,
-    output='dagmc.h5m',
-    tags='mat:1',
+    h5m_filename='dagmc.h5m',
     cubit_path='/opt/Coreform-Cubit-2021.5/bin/'
 )
 ```
