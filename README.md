@@ -4,7 +4,7 @@
 
 [![PyPI](https://img.shields.io/pypi/v/cad-to-h5m?color=brightgreen&label=pypi&logo=grebrightgreenen&logoColor=green)](https://pypi.org/project/cad-to-h5m/)
 
-[![codecov](https://codecov.io/gh/fusion-energy/cad_to_h5m/branch/main/graph/badge.svg)](https://codecov.io/gh/svalinn/cad_to_h5m)
+[![codecov](https://codecov.io/gh/fusion-energy/cad_to_h5m/branch/main/graph/badge.svg)](https://codecov.io/gh/fusion-energy/cad_to_h5m)
 
 [![docker-publish-release](https://github.com/fusion-energy/cad_to_h5m/actions/workflows/docker_publish.yml/badge.svg)](https://github.com/fusion-energy/cad_to_h5m/actions/workflows/docker_publish.yml)
 
