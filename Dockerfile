@@ -1,23 +1,18 @@
 # This Dockerfile creates an enviroment / dependancies needed to run the 
-# cubit_docker package.
+# cad_to_h5m package.
 
 # You will need to have you license file saved as license.lic in the same folder
 # as this Dockerfile when building
 
 # To build this Dockerfile into a docker image:
-# docker build -t cubit_docker .
+# docker build -t cad_to_h5m .
 
 # To run the resulting Docker image:
-# docker run -it cubit_docker
+# docker run -it cad_to_h5m
 
-# Python 3.8 image, Cubit don't support python 3.9 currently
 FROM continuumio/miniconda3:4.9.2 as dependencies
 
-
-
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8 \
-    PATH=/opt/openmc/bin:$PATH \
-    LD_LIBRARY_PATH=/opt/openmc/lib:$LD_LIBRARY_PATH \
     CC=/usr/bin/mpicc CXX=/usr/bin/mpicxx \
     DEBIAN_FRONTEND=noninteractive
 
@@ -36,10 +31,8 @@ RUN apt-get install -y libgl1-mesa-glx \
                        wget && \
                        apt-get clean
 
-# download cubit
-RUN wget -O coreform-cubit-2021.5.deb https://f002.backblazeb2.com/file/cubit-downloads/Coreform-Cubit/Releases/Linux/Coreform-Cubit-2021.5%2B15962_5043ef39-Lin64.deb
 
-# install dependencies
+# install cubit dependencies
 RUN apt-get install -y libx11-6 
 RUN apt-get install -y libxt6 
 RUN apt-get install -y libgl1
@@ -53,19 +46,28 @@ RUN apt-get install -y libxkbcommon-x11-0
 RUN apt-get install -y libxcb-randr0 
 RUN apt-get install -y libxcb-xinerama0
 
+
+# download cubit
+RUN wget -O coreform-cubit-2021.5.deb https://f002.backblazeb2.com/file/cubit-downloads/Coreform-Cubit/Releases/Linux/Coreform-Cubit-2021.5%2B15962_5043ef39-Lin64.deb
+
 # install cubit
 RUN dpkg -i coreform-cubit-2021.5.deb
 
-ENV PATH="/root/miniconda3/bin:${PATH}"
-ARG PATH="/root/miniconda3/bin:${PATH}"
-RUN apt-get update
-
-RUN apt-get install -y wget && rm -rf /var/lib/apt/lists/*
-
-RUN wget https://github.com/Shimwell/Cubit-plugin/releases/download/v0.6.0/svalinn-plugin_debian-10.10_cubit_2021.5.tgz
-# this will be downloaded from the main release when avaialbe
-
+# installs svalinn plugin for cubit
+RUN wget https://github.com/svalinn/Cubit-plugin/releases/download/0.2.1/svalinn-plugin_debian-10.10_cubit_2021.5.tgz
 RUN tar -xzvf svalinn-plugin_debian-10.10_cubit_2021.5.tgz -C /opt/Coreform-Cubit-2021.5
+
+# makes a python file and trys to import cubit
+RUN printf 'import sys\nsys.path.append("/opt/Coreform-Cubit-2021.5/bin/")\nimport cubit\ncubit.init([])\n' >> test_cubit_import.py
+
+# writes a non commercial license file
+# RUN printf 'Fri May 28 2021' >> /opt/Coreform-Cubit-2021.5/bin/licenses/cubit-learn.lic
+RUN mkdir -p /root/.config/Coreform/licenses
+RUN printf 'Fri May 28 2021' >> /root/.config/Coreform/licenses/cubit-learn.lic
+
+# helps to identify Cubit related errrors
+ENV CUBIT_VERBOSE=5
+
 
 FROM dependencies as final
 
@@ -73,13 +75,8 @@ COPY setup.py setup.py
 COPY README.md README.md
 COPY run_tests.sh run_tests.sh
 COPY cad_to_h5m cad_to_h5m/
-# todo make a build arg to allow local copy
-# COPY license.lic /opt/Coreform-Cubit-2021.5/bin/licenses/license.lic
 COPY tests tests/
 COPY examples examples/
 
 RUN python setup.py install
 
-RUN useradd --create-home --shell /bin/bash coreform
-USER coreform
-WORKDIR /home/coreform
