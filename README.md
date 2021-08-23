@@ -24,7 +24,7 @@ during the process which can speed up particle transport.
 Perhaps the most common use of this program is to convert a STP file into
 DAGMC geometry.
 ```bash
-cad-to-h5m -i part1.stp -o dagmc.h5m -t mat:1 -c /opt/Coreform-Cubit-2020.2/bin/python3/
+cad-to-h5m -i part1.stp -o dagmc.h5m -t mat:1 -c /opt/Coreform-Cubit-2021.5/bin/
 ```
 
 - the ```-i``` or ```--input``` argument specifies the input CAD filename(s)
@@ -38,13 +38,13 @@ geometry. This example combines two STP files into a single geometry with
 seperate material tags for each STP file and saves the result as a h5m file.
 
 ```bash
-cad-to-h5m -i part1.stp part2.stp -o dagmc.h5m -t mat:1 mat:2 -c /opt/Coreform-Cubit-2020.2/bin/python3/
+cad-to-h5m -i part1.stp part2.stp -o dagmc.h5m -t mat:1 mat:2 -c /opt/Coreform-Cubit-2021.5/bin/
 ```
 
 It is also possible to convert .sat files in the following way.
 
 ```bash
-cad-to-h5m -i part1.sat -o dagmc.h5m -t mat:1 -c /opt/Coreform-Cubit-2020.2/bin/python3/
+cad-to-h5m -i part1.sat -o dagmc.h5m -t mat:1 -c /opt/Coreform-Cubit-2021.5/bin/
 ``` -->
 
 # Python API usage
@@ -57,15 +57,15 @@ from cad_to_h5m import cad_to_h5m
 
 cad_to_h5m(
     files_with_tags={'filename':'part1.stp', 'material_tags':'m1'},
-    output='dagmc.h5m',
+    h5m_filename='dagmc.h5m',
     tags='mat:1',
-    cubit_path='/opt/Coreform-Cubit-2020.2/bin/python3/'
+    cubit_path='/opt/Coreform-Cubit-2021.5/bin/'
 )
 ```
 
 Creating a h5m file from two STP files called ```part1.stp``` and ```part2.stp```.
 Both parts have distinct material tag applied to them and the result is output
-as a h5m file.
+as a h5m file with the filename dagmc.h5m.
 
 ```python
 from cad_to_h5m import cad_to_h5m
@@ -75,9 +75,8 @@ cad_to_h5m(
         'filename':'part1.stp', 'material_tags':'m1'
         'filename':'part2.stp', 'material_tags':'m2'
     },
-    output='dagmc.h5m',
-    tags=['mat:1', 'mat:2'],
-    cubit_path='/opt/Coreform-Cubit-2020.2/bin/python3/'
+    h5m_filename='dagmc.h5m',
+    cubit_path='/opt/Coreform-Cubit-2021.5/bin/'
 )
 ```
 
@@ -89,9 +88,8 @@ from cad_to_h5m import cad_to_h5m
 
 cad_to_h5m(
     files_with_tags={'filename':'part1.sat', 'material_tags':'m1'},,
-    output='dagmc.h5m',
-    tags='mat:1',
-    cubit_path='/opt/Coreform-Cubit-2020.2/bin/python3/'
+    h5m_filename='dagmc.h5m',
+    cubit_path='/opt/Coreform-Cubit-2021.5/bin/'
 )
 ```
 
