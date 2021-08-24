@@ -1,7 +1,12 @@
 [![N|Python](https://www.python.org/static/community_logos/python-powered-w-100x40.png)](https://www.python.org)
-[![docker based CI](https://github.com/svalinn/cad_to_h5m/actions/workflows/docker_ci.yml/badge.svg)](https://github.com/svalinn/cad_to_h5m/actions/workflows/docker_ci.yml)
+
+[![CircleCI](https://circleci.com/gh/fusion-energy/cad_to_h5m/tree/main.svg?style=svg)](https://circleci.com/gh/fusion-energy/cad_to_h5m/tree/main) [![CI with docker build](https://github.com/fusion-energy/cad_to_h5m/actions/workflows/ci_with_docker_build.yml/badge.svg)](https://github.com/fusion-energy/cad_to_h5m/actions/workflows/ci_with_docker_build.yml)
+
 [![PyPI](https://img.shields.io/pypi/v/cad-to-h5m?color=brightgreen&label=pypi&logo=grebrightgreenen&logoColor=green)](https://pypi.org/project/cad-to-h5m/)
-[![codecov](https://codecov.io/gh/svalinn/cad_to_h5m/branch/main/graph/badge.svg)](https://codecov.io/gh/svalinn/cad_to_h5m)
+
+[![codecov](https://codecov.io/gh/fusion-energy/cad_to_h5m/branch/main/graph/badge.svg)](https://codecov.io/gh/fusion-energy/cad_to_h5m)
+
+[![docker-publish-release](https://github.com/fusion-energy/cad_to_h5m/actions/workflows/docker_publish.yml/badge.svg)](https://github.com/fusion-energy/cad_to_h5m/actions/workflows/docker_publish.yml)
 
 This is a minimal Python package that provides both **command line** and
 **API** interfaces for converting **multiple** CAD files (STP and SAT format)
@@ -52,7 +57,7 @@ from cad_to_h5m import cad_to_h5m
 
 cad_to_h5m(
     files_with_tags={'filename':'part1.stp', 'material_tags':'m1'},
-    output='dagmc.h5m',
+    h5m_filename='dagmc.h5m',
     tags='mat:1',
     cubit_path='/opt/Coreform-Cubit-2021.5/bin/'
 )
@@ -60,7 +65,7 @@ cad_to_h5m(
 
 Creating a h5m file from two STP files called ```part1.stp``` and ```part2.stp```.
 Both parts have distinct material tag applied to them and the result is output
-as a h5m file.
+as a h5m file with the filename dagmc.h5m.
 
 ```python
 from cad_to_h5m import cad_to_h5m
@@ -70,8 +75,7 @@ cad_to_h5m(
         'filename':'part1.stp', 'material_tags':'m1'
         'filename':'part2.stp', 'material_tags':'m2'
     },
-    output='dagmc.h5m',
-    tags=['mat:1', 'mat:2'],
+    h5m_filename='dagmc.h5m',
     cubit_path='/opt/Coreform-Cubit-2021.5/bin/'
 )
 ```
@@ -84,7 +88,7 @@ from cad_to_h5m import cad_to_h5m
 
 cad_to_h5m(
     files_with_tags={'filename':'part1.sat', 'material_tags':'m1'},
-    output='dagmc.h5m',
+    h5m_filename='dagmc.h5m',
     tags='mat:1',
     cubit_path='/opt/Coreform-Cubit-2021.5/bin/'
 )
@@ -103,7 +107,7 @@ from cad_to_h5m import cad_to_h5m
 
 cad_to_h5m(
     files_with_tags={'filename':'part1.sat', 'material_tags':'m1', 'tet_mesh': 'size 0.5'},
-    output='dagmc.h5m',
+    h5m_filename='dagmc.h5m',
     tags='mat:1',
     cubit_path='/opt/Coreform-Cubit-2021.5/bin/'
     exo_filename='unstructured_mesh_file.exo'

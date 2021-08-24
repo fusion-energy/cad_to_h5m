@@ -1,0 +1,33 @@
+# Python CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-python/ for more details
+
+version: 2
+jobs:
+  # test:
+  build:
+    docker:
+      - image: ghcr.io/fusion-energy/cad_to_h5m:dependencies
+    steps:
+      - checkout
+      - run:
+          name: install
+          command: |
+            python setup.py install
+
+      - run:
+          name: run utils tests
+          command: 
+            pytest tests/test_python_api.py -v --cov=cad_to_h5m --cov-append --cov-report term --cov-report xml --junitxml=test-reports/junit.xml
+
+      - store_test_results:
+          path: test-reports
+
+      - run: bash <(curl -s https://codecov.io/bash)
+
+
+workflows:
+  version: 2
+  test-build-deploy:
+    jobs:
+      - build
