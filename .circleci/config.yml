@@ -17,7 +17,7 @@ jobs:
 
       - run:
           name: run utils tests
-          command: 
+          command:
             pytest tests/test_python_api.py -v --cov=cad_to_h5m --cov-append --cov-report term --cov-report xml --junitxml=test-reports/junit.xml
 
       - store_test_results:
