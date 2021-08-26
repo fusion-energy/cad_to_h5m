@@ -264,14 +264,15 @@ def find_number_of_volumes_in_each_step_file(files_with_tags, cubit):
     # all_groups=cubit.parse_cubit_list("group","all")
     # starting_group_id = len(all_groups)
     for entry in files_with_tags:
+        print(entry)
         # starting_group_id = starting_group_id +1
         current_vols = cubit.parse_cubit_list("volume", "all")
         # print(os.path.join(basefolder, entry['filename']))
-        if entry["filename"].endswith(".sat"):
-            import_type = "acis"
         if entry["filename"].endswith(
                 ".stp") or entry["filename"].endswith(".step"):
             import_type = "step"
+        elif entry["filename"].endswith(".sat"):
+            import_type = "acis"
         short_file_name = os.path.split(entry["filename"])[-1]
         # print('short_file_name',short_file_name)
         # cubit.cmd('import '+import_type+' "' + entry['stp_filename'] + '" separate_bodies no_surfaces no_curves no_vertices group "'+str(short_file_name)+'"')
