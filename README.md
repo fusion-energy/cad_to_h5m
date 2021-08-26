@@ -58,7 +58,7 @@ a material tag to the volume.
 from cad_to_h5m import cad_to_h5m
 
 cad_to_h5m(
-    files_with_tags=[{'filename':'part1.stp', 'material_tags':'m1'}],
+    files_with_tags=[{'cad_filename':'part1.stp', 'material_tags':'m1'}],
     h5m_filename='dagmc.h5m',
     cubit_path='/opt/Coreform-Cubit-2021.5/bin/'
 )
@@ -73,8 +73,8 @@ from cad_to_h5m import cad_to_h5m
 
 cad_to_h5m(
     files_with_tags=[
-        {'filename':'part1.stp', 'material_tags':'m1'},
-        {'filename':'part2.stp', 'material_tags':'m2'}
+        {'cad_filename':'part1.stp', 'material_tags':'m1'},
+        {'cad_filename':'part2.stp', 'material_tags':'m2'}
     ],
     h5m_filename='dagmc.h5m',
     cubit_path='/opt/Coreform-Cubit-2021.5/bin/'
@@ -88,7 +88,7 @@ extension.
 from cad_to_h5m import cad_to_h5m
 
 cad_to_h5m(
-    files_with_tags=[{'filename':'part1.sat', 'material_tags':'m1'}],
+    files_with_tags=[{'cad_filename':'part1.sat', 'material_tags':'m1'}],
     h5m_filename='dagmc.h5m',
     cubit_path='/opt/Coreform-Cubit-2021.5/bin/'
 )
@@ -106,7 +106,7 @@ for the use of unstructured meshes in OpenMC.
 from cad_to_h5m import cad_to_h5m
 
 cad_to_h5m(
-    files_with_tags=[{'filename':'part1.sat', 'material_tags':'m1', 'tet_mesh': 'size 0.5'}],
+    files_with_tags=[{'cad_filename':'part1.sat', 'material_tags':'m1', 'tet_mesh': 'size 0.5'}],
     h5m_filename='dagmc.h5m',
     cubit_path='/opt/Coreform-Cubit-2021.5/bin/'
     exo_filename='unstructured_mesh_file.exo'

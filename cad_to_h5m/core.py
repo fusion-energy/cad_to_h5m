@@ -30,10 +30,10 @@ def cad_to_h5m(
 
     files_with_tags: The file names of the input CAD files with associated
         materials tags in the form of a list of dictionaries were each
-        dictionary has a "filename" and "material_tag" key. For example
-        [{"material_tag": "mat1", "filename": "part1.stp"}, {"material_tag":
-        "mat2", "filename": "part2.stp"}]. There is also an option to create a
-        tet mesh of entries by including a "tet_mesh" key in the dictionary.
+        dictionary has a "cad_filename" and "material_tag" key. For example
+        [{"material_tag": "mat1", "cad_filename": "part1.stp"}, {"material_tag":
+        "mat2", "cad_filename": "part2.stp"}]. There is also an option to create
+        a tet mesh of entries by including a "tet_mesh" key in the dictionary.
         The value is passed to the Cubit mesh command. An example entry would be
         "tet_mesh": "size 0.5"
     h5m_filename: the file name of the output h5m file
@@ -71,14 +71,15 @@ def cad_to_h5m(
 
     cubit.init([])
 
-    geometry_details = find_number_of_volumes_in_each_step_file(
+    geometry_details, total_number_of_volumes = find_number_of_volumes_in_each_step_file(
         files_with_tags, cubit)
     print(geometry_details)
     tag_geometry_with_mats(geometry_details, cubit)
 
-    if imprint:
+    if imprint and total_number_of_volumes > 1:
         imprint_geometry(cubit)
-    merge_geometry(merge_tolerance, cubit)
+    if total_number_of_volumes > 1:
+        merge_geometry(merge_tolerance, cubit)
     find_reflecting_surfaces_of_reflecting_wedge(
         geometry_details, surface_reflectivity_name, cubit
     )
@@ -269,27 +270,27 @@ def find_number_of_volumes_in_each_step_file(files_with_tags, cubit):
         print(entry)
         # starting_group_id = starting_group_id +1
         current_vols = cubit.parse_cubit_list("volume", "all")
-        # print(os.path.join(basefolder, entry['filename']))
-        if entry["filename"].endswith(
-                ".stp") or entry["filename"].endswith(".step"):
+        # print(os.path.join(basefolder, entry['cad_filename']))
+        if entry["cad_filename"].endswith(
+                ".stp") or entry["cad_filename"].endswith(".step"):
             import_type = "step"
-        elif entry["filename"].endswith(".sat"):
+        elif entry["cad_filename"].endswith(".sat"):
             import_type = "acis"
         else:
-            msg = (f'File format for {entry["filename"]} is not supported.'
+            msg = (f'File format for {entry["cad_filename"]} is not supported.'
                    'Try step files or sat files')
             raise ValueError(msg)
-        if not Path(entry["filename"]).is_file():
-            msg = f'File with filename {entry["filename"]} could not be found'
+        if not Path(entry["cad_filename"]).is_file():
+            msg = f'File with filename {entry["cad_filename"]} could not be found'
             raise FileNotFoundError(msg)
-        short_file_name = os.path.split(entry["filename"])[-1]
+        short_file_name = os.path.split(entry["cad_filename"])[-1]
         # print('short_file_name',short_file_name)
         # cubit.cmd('import '+import_type+' "' + entry['stp_filename'] + '" separate_bodies no_surfaces no_curves no_vertices group "'+str(short_file_name)+'"')
         cubit.cmd(
             "import "
             + import_type
             + ' "'
-            + entry["filename"]
+            + entry["cad_filename"]
             + '" separate_bodies no_surfaces no_curves no_vertices '
         )
         all_vols = cubit.parse_cubit_list("volume", "all")
@@ -324,4 +325,5 @@ def find_number_of_volumes_in_each_step_file(files_with_tags, cubit):
                 "entry['surface_reflectivity']",
                 entry["surface_reflectivity"])
     cubit.cmd("separate body all")
-    return files_with_tags
+
+    return files_with_tags, sum(all_vols)

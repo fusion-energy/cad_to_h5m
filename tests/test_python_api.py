@@ -30,7 +30,7 @@ class TestApiUsage(unittest.TestCase):
         returned_filename = cad_to_h5m(
             files_with_tags=[
                 {
-                    "filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/blanket.stp",
+                    "cad_filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/blanket.stp",
                     "material_tag": "mat1",
                 }
             ],
@@ -56,7 +56,7 @@ class TestApiUsage(unittest.TestCase):
         cad_to_h5m(
             files_with_tags=[
                 {
-                    "filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/blanket.stp",
+                    "cad_filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/blanket.stp",
                     "material_tag": "mat1",
                 }],
             h5m_filename="dagmc.h5m",
@@ -73,7 +73,7 @@ class TestApiUsage(unittest.TestCase):
         cad_to_h5m(
             files_with_tags=[
                 {
-                    "filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/blanket.stp",
+                    "cad_filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/blanket.stp",
                     "material_tag": "mat1",
                 }],
             cubit_filename="dagmc.cub",
@@ -89,7 +89,7 @@ class TestApiUsage(unittest.TestCase):
         cad_to_h5m(
             files_with_tags=[
                 {
-                    "filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/blanket.stp",
+                    "cad_filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/blanket.stp",
                     "material_tag": "mat1",
                 }],
             h5m_filename="dagmc_default_faceting_tolerance.h5m",
@@ -101,7 +101,7 @@ class TestApiUsage(unittest.TestCase):
         cad_to_h5m(
             files_with_tags=[
                 {
-                    "filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/blanket.stp",
+                    "cad_filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/blanket.stp",
                     "material_tag": "mat1",
                 }],
             h5m_filename="dagmc_small_faceting_tolerance.h5m",
@@ -123,7 +123,7 @@ class TestApiUsage(unittest.TestCase):
         cad_to_h5m(
             files_with_tags=[
                 {
-                    "filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/pf_coils.stp",
+                    "cad_filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/pf_coils.stp",
                     "material_tag": "mat1",
                     "tet_mesh": "size 3"}],
             exo_filename="umesh_3.exo",
@@ -136,7 +136,7 @@ class TestApiUsage(unittest.TestCase):
         cad_to_h5m(
             files_with_tags=[
                 {
-                    "filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/pf_coils.stp",
+                    "cad_filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/pf_coils.stp",
                     "material_tag": "mat1",
                     "tet_mesh": "size 10"}],
             exo_filename="umesh_10.exo",
@@ -155,7 +155,7 @@ class TestApiUsage(unittest.TestCase):
         cad_to_h5m(
             files_with_tags=[
                 {
-                    "filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/pf_coils.stp",
+                    "cad_filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/pf_coils.stp",
                     "material_tag": "mat1",
                     "tet_mesh": ""}],
             exo_filename="umesh_default.exo",
