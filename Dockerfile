@@ -10,7 +10,9 @@
 # To run the resulting Docker image:
 # docker run -it cad_to_h5m
 
+# docker image contains python 3.8 as default
 FROM continuumio/miniconda3:4.9.2 as dependencies
+
 
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8 \
     CC=/usr/bin/mpicc CXX=/usr/bin/mpicxx \
@@ -53,6 +55,10 @@ RUN wget -O coreform-cubit-2021.5.deb https://f002.backblazeb2.com/file/cubit-do
 # install cubit
 RUN dpkg -i coreform-cubit-2021.5.deb
 
+RUN apt-get update
+
+RUN apt-get install -y wget
+
 # installs svalinn plugin for cubit
 RUN wget https://github.com/svalinn/Cubit-plugin/releases/download/0.2.1/svalinn-plugin_debian-10.10_cubit_2021.5.tgz
 RUN tar -xzvf svalinn-plugin_debian-10.10_cubit_2021.5.tgz -C /opt/Coreform-Cubit-2021.5
@@ -76,7 +82,7 @@ COPY README.md README.md
 COPY run_tests.sh run_tests.sh
 COPY cad_to_h5m cad_to_h5m/
 COPY tests tests/
-COPY examples examples/
+COPY examples/*.py examples/
 
 RUN python setup.py install
 

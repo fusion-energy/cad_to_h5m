@@ -2,11 +2,13 @@ import sys
 import os
 import json
 from typing import Dict, List, TypedDict
+from pathlib import Path
 
 
-class FilesWithTags(TypedDict):
+class FilesWithTags(TypedDict, total=False):
     filename: str
     material_tag: str
+    tet_mesh: str
 
 
 def cad_to_h5m(
@@ -20,6 +22,7 @@ def cad_to_h5m(
     imprint: bool = True,
     geometry_details_filename: str = "geometry_details.json",
     surface_reflectivity_name: str = "reflective",
+    exo_filename: str = "tet_mesh.exo",
 ):
     """Converts a CAD files in STP or SAT format into a h5m file for use in
     DAGMC simulations. The h5m file contains material tags associated with the
@@ -29,7 +32,10 @@ def cad_to_h5m(
         materials tags in the form of a list of dictionaries were each
         dictionary has a "filename" and "material_tag" key. For example
         [{"material_tag": "mat1", "filename": "part1.stp"}, {"material_tag":
-        "mat2", "filename": "part2.stp"}]
+        "mat2", "filename": "part2.stp"}]. There is also an option to create a
+        tet mesh of entries by including a "tet_mesh" key in the dictionary.
+        The value is passed to the Cubit mesh command. An example entry would be
+        "tet_mesh": "size 0.5"
     h5m_filename: the file name of the output h5m file
     cubit_filename: the file name of the output cubit file. Should end with .cub
         or .cub5
@@ -37,7 +43,8 @@ def cad_to_h5m(
         Ubuntu with Cubit 2021.5 this would be "/opt/Coreform-Cubit-2021.5/bin/"
     merge_tolerance: The merge tolerance to apply when merging surfaces into
         one.
-    faceting_tolerance: The faceting tolerance to apply when faceting edges
+    faceting_tolerance: The faceting tolerance to apply when faceting edges. Use
+        a faceting_tolerance 1.0e-4
     make_watertight: flag to control if the geometry is made watertight prior to
         exporting the h5m file
     imprint: flag to control if the geometry is imprinted prior to exporting
@@ -75,6 +82,9 @@ def cad_to_h5m(
     find_reflecting_surfaces_of_reflecting_wedge(
         geometry_details, surface_reflectivity_name, cubit
     )
+
+    create_tet_mesh(geometry_details, exo_filename, cubit)
+
     save_output_files(
         make_watertight,
         geometry_details,
@@ -86,6 +96,39 @@ def cad_to_h5m(
     )
     return h5m_filename
 
+
+def create_tet_mesh(geometry_details, exo_filename, cubit):
+    cubit.cmd("Trimesher volume gradation 1.3")
+
+    cubit.cmd("volume all size auto factor 5")
+    for entry in geometry_details:
+        if "tet_mesh" in entry.keys():
+            for volume in entry["volumes"]:
+                cubit.cmd(
+                    "volume " + str(volume) + " size auto factor 6"
+                )  # this number is the size of the mesh 1 is small 10 is large
+                cubit.cmd(
+                    "volume all scheme tetmesh proximity layers off geometric sizing on")
+                # example entry ' size 0.5'
+                cubit.cmd(f"volume {str(volume)} " + entry["tet_mesh"])
+                cubit.cmd("mesh volume " + str(volume))
+            print('meshed some volumes')
+
+    cubit.cmd(f'export mesh "{exo_filename}" overwrite')
+
+
+# def save_tet_details_to_json_file(
+#         geometry_details,
+#         filename="mesh_details.json"):
+#     for entry in geometry_details:
+#         material = entry["material"]
+#     tets_in_volumes = cubit.parse_cubit_list(
+#         "tet", " in volume " + " ".join(entry["volumes"])
+#     )
+#     print("material ", material, " has ", len(tets_in_volumes), " tets")
+#     entry["tet_ids"] = tets_in_volumes
+#     with open(filename, "w") as outfile:
+#         json.dump(geometry_details, outfile, indent=4)
 
 def save_output_files(
     make_watertight,
@@ -102,11 +145,9 @@ def save_output_files(
     if geometry_details_filename is not None:
         with open(geometry_details_filename, "w") as outfile:
             json.dump(geometry_details, outfile, indent=4)
-    # os.system('mbconvert -1 '+h5m_filename+' dagmc_not_watertight_edges.h5m')
+
     if cubit_filename is not None:
         cubit.cmd('save as "' + cubit_filename + '" overwrite')
-    # if trelis_filename is not None:
-    #     cubit.cmd('save as "'+trelis_filename+'" overwrite')
 
     print("using faceting_tolerance of ", faceting_tolerance)
     if make_watertight:
@@ -224,14 +265,22 @@ def find_number_of_volumes_in_each_step_file(files_with_tags, cubit):
     # all_groups=cubit.parse_cubit_list("group","all")
     # starting_group_id = len(all_groups)
     for entry in files_with_tags:
+        print(entry)
         # starting_group_id = starting_group_id +1
         current_vols = cubit.parse_cubit_list("volume", "all")
         # print(os.path.join(basefolder, entry['filename']))
-        if entry["filename"].endswith(".sat"):
-            import_type = "acis"
         if entry["filename"].endswith(
                 ".stp") or entry["filename"].endswith(".step"):
             import_type = "step"
+        elif entry["filename"].endswith(".sat"):
+            import_type = "acis"
+        else:
+            msg = (f'File format for {entry["filename"]} is not supported.'
+                   'Try step files or sat files')
+            raise ValueError(msg)
+        if not Path(entry["filename"]).is_file():
+            msg = f'File with filename {entry["filename"]} could not be found'
+            raise FileNotFoundError(msg)
         short_file_name = os.path.split(entry["filename"])[-1]
         # print('short_file_name',short_file_name)
         # cubit.cmd('import '+import_type+' "' + entry['stp_filename'] + '" separate_bodies no_surfaces no_curves no_vertices group "'+str(short_file_name)+'"')
