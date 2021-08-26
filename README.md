@@ -58,7 +58,6 @@ from cad_to_h5m import cad_to_h5m
 cad_to_h5m(
     files_with_tags={'filename':'part1.stp', 'material_tags':'m1'},
     h5m_filename='dagmc.h5m',
-    tags='mat:1',
     cubit_path='/opt/Coreform-Cubit-2021.5/bin/'
 )
 ```
