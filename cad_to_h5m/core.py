@@ -255,7 +255,7 @@ def tag_geometry_with_mats(geometry_details, cubit):
                 + " ".join(entry["volumes"])
             )
         else:
-            msg = "dictionary key material_tag is missing for {entry}"
+            msg = f"dictionary key material_tag is missing for {entry}"
             raise ValueError(msg)
 
 
