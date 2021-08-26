@@ -1,4 +1,5 @@
 import paramak
+from cad_to_h5m import cad_to_h5m
 
 my_shape = paramak.Plasma(
     major_radius=620,
@@ -8,5 +9,12 @@ my_shape = paramak.Plasma(
     rotation_angle=90,
 )
 
-# this function makes up of cad_to_h5m within the paramak
-my_shape.export_h5m_with_cubit()
+my_shape.export_stp()
+
+files_with_tags = my_shape.neutronics_description()
+
+cad_to_h5m(
+    h5m_filename=' "dagmc.h5m',
+    cubit_path="/opt/Coreform-Cubit-2021.5/bin/",
+    files_with_tags=files_with_tags
+)
