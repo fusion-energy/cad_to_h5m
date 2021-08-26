@@ -4,6 +4,7 @@ import json
 from typing import Dict, List, TypedDict
 from pathlib import Path
 
+
 class FilesWithTags(TypedDict, total=False):
     filename: str
     material_tag: str
@@ -275,7 +276,7 @@ def find_number_of_volumes_in_each_step_file(files_with_tags, cubit):
             import_type = "acis"
         else:
             msg = (f'File format for {entry["filename"]} is not supported.'
-                    'Try step files or sat files')
+                   'Try step files or sat files')
             raise ValueError(msg)
         if not Path(entry["filename"]).is_file():
             msg = f'File with filename {entry["filename"]} could not be found'
