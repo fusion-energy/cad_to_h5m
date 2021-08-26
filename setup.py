@@ -25,8 +25,8 @@ setuptools.setup(
         'Operating System :: OS Independent',
     ],
     tests_require=[
-        "pytest-cov",
+        "pytest",
     ],
     python_requires='>=3.6',
-    install_requires=["pytest-cov"],
+    install_requires=["pytest"],
 )
