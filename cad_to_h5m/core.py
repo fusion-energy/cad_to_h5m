@@ -255,7 +255,8 @@ def tag_geometry_with_mats(geometry_details, cubit):
                 + " ".join(entry["volumes"])
             )
         else:
-            print("material_key_name", "material_tag", "not found for", entry)
+            msg = "dictionary key material_tag is missing for {entry}"
+            raise ValueError(msg)
 
 
 def find_number_of_volumes_in_each_step_file(files_with_tags, cubit):
