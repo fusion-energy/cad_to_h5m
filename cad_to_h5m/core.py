@@ -2,7 +2,7 @@ import sys
 import os
 import json
 from typing import Dict, List, TypedDict
-
+from pathlib import Path
 
 class FilesWithTags(TypedDict, total=False):
     filename: str
@@ -273,6 +273,13 @@ def find_number_of_volumes_in_each_step_file(files_with_tags, cubit):
             import_type = "step"
         elif entry["filename"].endswith(".sat"):
             import_type = "acis"
+        else:
+            msg = (f'File format for {entry["filename"]} is not supported.'
+                    'Try step files or sat files')
+            raise ValueError(msg)
+        if not Path(entry["filename"]).is_file():
+            msg = f'File with filename {entry["filename"]} could not be found'
+            raise FileNotFoundError(msg)
         short_file_name = os.path.split(entry["filename"])[-1]
         # print('short_file_name',short_file_name)
         # cubit.cmd('import '+import_type+' "' + entry['stp_filename'] + '" separate_bodies no_surfaces no_curves no_vertices group "'+str(short_file_name)+'"')
