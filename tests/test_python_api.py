@@ -48,6 +48,28 @@ class TestApiUsage(unittest.TestCase):
         assert Path(returned_filename).is_file()
         assert test_h5m_filename == returned_filename
 
+    def test_h5m_file_creation_in_subfolder(self):
+        """Checks that a h5m file is created from stp files when make_watertight
+        is set to false"""
+
+        os.system("rm test_dagmc.h5m")
+
+        test_h5m_filename = "subfolder/test_dagmc.h5m"
+
+        returned_filename = cad_to_h5m(
+            files_with_tags=[
+                {
+                    "cad_filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/blanket.stp",
+                    "material_tag": "mat1",
+                }],
+            h5m_filename=test_h5m_filename,
+            make_watertight=False,
+        )
+
+        assert Path(test_h5m_filename).is_file()
+        assert Path(returned_filename).is_file()
+        assert test_h5m_filename == returned_filename
+
     def test_watertight_h5m_file_creation(self):
         """Checks that a h5m file is created from stp files"""
 
@@ -162,3 +184,45 @@ class TestApiUsage(unittest.TestCase):
         )
 
         assert Path("umesh_default.exo").is_file()
+
+    def test_exo_file_suffix_error_handling(self):
+        """Attempts save a cub file with the wrong file suffix"""
+
+        def incorrect_suffix():
+            cad_to_h5m(
+                files_with_tags=[
+                    {
+                        "cad_filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/pf_coils.stp",
+                        "material_tag": "mat1",
+                    }],
+                exo_filename="output_file_with.not_correct_suffix",
+            )
+        self.assertRaises(ValueError, incorrect_suffix)
+
+    def test_h5m_file_suffix_error_handling(self):
+        """Attempts save a cub file with the wrong file suffix"""
+
+        def incorrect_suffix():
+            cad_to_h5m(
+                files_with_tags=[
+                    {
+                        "cad_filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/pf_coils.stp",
+                        "material_tag": "mat1",
+                    }],
+                h5m_filename="output_file_with.not_correct_suffix",
+            )
+        self.assertRaises(ValueError, incorrect_suffix)
+
+    def test_cubit_file_suffix_error_handling(self):
+        """Attempts save a cub file with the wrong file suffix"""
+
+        def incorrect_suffix():
+            cad_to_h5m(
+                files_with_tags=[
+                    {
+                        "cad_filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/pf_coils.stp",
+                        "material_tag": "mat1",
+                    }],
+                cubit_filename="output_file_with.not_correct_suffix",
+            )
+        self.assertRaises(ValueError, incorrect_suffix)
