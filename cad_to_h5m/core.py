@@ -1,7 +1,7 @@
 import sys
 import os
 import json
-from typing import Dict, List, TypedDict
+from typing import Dict, List, TypedDict, Optional
 from pathlib import Path
 
 
@@ -15,12 +15,12 @@ def cad_to_h5m(
     files_with_tags: FilesWithTags,
     h5m_filename: str = "dagmc.h5m",
     cubit_path: str = "/opt/Coreform-Cubit-2021.5/bin/",
-    cubit_filename: str = "dagmc.cub",
+    cubit_filename: Optional[str] = None,
     merge_tolerance: float = 1e-4,
     faceting_tolerance: float = 1.0e-2,
     make_watertight: bool = True,
     imprint: bool = True,
-    geometry_details_filename: str = "geometry_details.json",
+    geometry_details_filename: Optional[str] = None,
     surface_reflectivity_name: str = "reflective",
     exo_filename: str = "tet_mesh.exo",
 ):
@@ -149,6 +149,8 @@ def save_output_files(
 
     if cubit_filename is not None:
         cubit.cmd('save as "' + cubit_filename + '" overwrite')
+
+    Path(h5m_filename).parents[0].mkdir(parents=True, exist_ok=True)
 
     print("using faceting_tolerance of ", faceting_tolerance)
     if make_watertight:
