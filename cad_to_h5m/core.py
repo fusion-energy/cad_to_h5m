@@ -61,16 +61,18 @@ def cad_to_h5m(
     if Path(h5m_filename).suffix == ".h5m" or h5m_filename is None:
         pass
     else:
-        msg = ('The h5m_filename argument should end with ".h5m". The provided '
-              f'h5m_filename "{h5m_filename}" does not end with .h5m')
+        msg = (
+            'The h5m_filename argument should end with ".h5m". The provided '
+            f'h5m_filename "{h5m_filename}" does not end with .h5m')
         raise ValueError(msg)
 
-    if Path(cubit_filename).suffix == ".cub" or  Path(cubit_filename).suffix == ".cub5" or cubit_filename is None:
+    if Path(cubit_filename).suffix in [".cub", ".cub5"] or cubit_filename is None:
         pass
     else:
-        msg = ('The cubit_filename argument should end with ".cub" or ".cub5". '
-              f'The provided cubit_filename "{cubit_filename}" does not end '
-              ' with either')
+        msg = (
+            'The cubit_filename argument should end with ".cub" or ".cub5". '
+            f'The provided cubit_filename "{cubit_filename}" does not end '
+            ' with either')
         raise ValueError(msg)
 
     sys.path.append(cubit_path)
