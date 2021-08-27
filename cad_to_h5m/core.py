@@ -74,7 +74,8 @@ def cad_to_h5m(
             f'exo_filename "{exo_filename}" does not end with .exo')
         raise ValueError(msg)
 
-    if cubit_filename is None or Path(cubit_filename).suffix in [".cub", ".cub5"]:
+    if cubit_filename is None or Path(cubit_filename).suffix in [
+            ".cub", ".cub5"]:
         pass
     else:
         msg = (

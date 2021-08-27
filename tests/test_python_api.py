@@ -61,8 +61,7 @@ class TestApiUsage(unittest.TestCase):
                 {
                     "cad_filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/blanket.stp",
                     "material_tag": "mat1",
-                }
-            ],
+                }],
             h5m_filename=test_h5m_filename,
             make_watertight=False,
         )
@@ -180,9 +179,7 @@ class TestApiUsage(unittest.TestCase):
                 {
                     "cad_filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/pf_coils.stp",
                     "material_tag": "mat1",
-                    "tet_mesh": ""
-                }
-            ],
+                    "tet_mesh": ""}],
             exo_filename="umesh_default.exo",
         )
 
@@ -197,8 +194,7 @@ class TestApiUsage(unittest.TestCase):
                     {
                         "cad_filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/pf_coils.stp",
                         "material_tag": "mat1",
-                    }
-                ],
+                    }],
                 exo_filename="output_file_with.not_correct_suffix",
             )
         self.assertRaises(ValueError, incorrect_suffix)
@@ -212,8 +208,7 @@ class TestApiUsage(unittest.TestCase):
                     {
                         "cad_filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/pf_coils.stp",
                         "material_tag": "mat1",
-                    }
-                ],
+                    }],
                 h5m_filename="output_file_with.not_correct_suffix",
             )
         self.assertRaises(ValueError, incorrect_suffix)
@@ -227,8 +222,7 @@ class TestApiUsage(unittest.TestCase):
                     {
                         "cad_filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/pf_coils.stp",
                         "material_tag": "mat1",
-                    }
-                ],
+                    }],
                 cubit_filename="output_file_with.not_correct_suffix",
             )
         self.assertRaises(ValueError, incorrect_suffix)
