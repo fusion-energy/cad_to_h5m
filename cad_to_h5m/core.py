@@ -58,7 +58,7 @@ def cad_to_h5m(
         in OpenMC and MCNP.
     """
 
-    if Path(h5m_filename).suffix == ".h5m" or h5m_filename is None:
+    if h5m_filename is None or Path(h5m_filename).suffix == ".h5m":
         pass
     else:
         msg = (
@@ -66,7 +66,15 @@ def cad_to_h5m(
             f'h5m_filename "{h5m_filename}" does not end with .h5m')
         raise ValueError(msg)
 
-    if Path(cubit_filename).suffix in [".cub", ".cub5"] or cubit_filename is None:
+    if exo_filename is None or Path(exo_filename).suffix == ".exo":
+        pass
+    else:
+        msg = (
+            'The exo_filename argument should end with ".exo". The provided '
+            f'exo_filename "{exo_filename}" does not end with .exo')
+        raise ValueError(msg)
+
+    if cubit_filename is None or Path(cubit_filename).suffix in [".cub", ".cub5"]:
         pass
     else:
         msg = (
