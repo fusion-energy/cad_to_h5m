@@ -58,15 +58,20 @@ def cad_to_h5m(
         in OpenMC and MCNP.
     """
 
-    if h5m_filename.suffix == ".h5m" or h5m_filename is None:
+    if Path(h5m_filename).suffix == ".h5m" or Path(h5m_filename) is None:
         pass
     else:
-        raise ValueError('h5m_filename must end with .h5m')
+        msg = ('The h5m_filename argument should end with ".h5m". The provided '
+              f'h5m_filename "{h5m_filename}" does not end with .h5m')
+        raise ValueError(msg)
 
-    if cubit_filename.suffix == ".cub" or  cubit_filename.suffix == ".cub5" or h5m_filename is None:
+    if Path(cubit_filename).suffix == ".cub" or  Path(cubit_filename).suffix == ".cub5" or Path(cubit_filename) is None:
         pass
     else:
-        raise ValueError('cubit_filename must end with .cub or cub5')
+        msg = ('The cubit_filename argument should end with ".cub" or ".cub5". '
+              f'The provided cubit_filename "{cubit_filename}" does not end '
+              ' with either')
+        raise ValueError(msg)
 
     sys.path.append(cubit_path)
 
