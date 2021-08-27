@@ -49,7 +49,7 @@ def cad_to_h5m(
         exporting the h5m file
     imprint: flag to control if the geometry is imprinted prior to exporting
         the h5m file
-    geometry_details_filename: The file name to use when saving the geometry
+    geometry_details_filename: The filename to use when saving the geometry
         details. This include linkages between volume numbers, material tags and
         CAD file names. This can be useful for finding the volume number to
         perform a neutronics tally on.
@@ -57,6 +57,16 @@ def cad_to_h5m(
         surfaces. This changes for some neutronics codes but is "reflective"
         in OpenMC and MCNP.
     """
+
+    if h5m_filename.suffix == ".h5m" or h5m_filename is None:
+        pass
+    else:
+        raise ValueError('h5m_filename must end with .h5m')
+
+    if cubit_filename.suffix == ".cub" or  cubit_filename.suffix == ".cub5" or h5m_filename is None:
+        pass
+    else:
+        raise ValueError('cubit_filename must end with .cub or cub5')
 
     sys.path.append(cubit_path)
 
