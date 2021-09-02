@@ -1,7 +1,7 @@
 import sys
 import os
 import json
-from typing import Dict, List, TypedDict
+from typing import Dict, List, TypedDict, Optional
 from pathlib import Path
 
 
@@ -15,12 +15,12 @@ def cad_to_h5m(
     files_with_tags: FilesWithTags,
     h5m_filename: str = "dagmc.h5m",
     cubit_path: str = "/opt/Coreform-Cubit-2021.5/bin/",
-    cubit_filename: str = "dagmc.cub",
+    cubit_filename: Optional[str] = None,
     merge_tolerance: float = 1e-4,
     faceting_tolerance: float = 1.0e-2,
     make_watertight: bool = True,
     imprint: bool = True,
-    geometry_details_filename: str = "geometry_details.json",
+    geometry_details_filename: Optional[str] = None,
     surface_reflectivity_name: str = "reflective",
     exo_filename: str = "tet_mesh.exo",
 ):
@@ -49,7 +49,7 @@ def cad_to_h5m(
         exporting the h5m file
     imprint: flag to control if the geometry is imprinted prior to exporting
         the h5m file
-    geometry_details_filename: The file name to use when saving the geometry
+    geometry_details_filename: The filename to use when saving the geometry
         details. This include linkages between volume numbers, material tags and
         CAD file names. This can be useful for finding the volume number to
         perform a neutronics tally on.
@@ -57,6 +57,32 @@ def cad_to_h5m(
         surfaces. This changes for some neutronics codes but is "reflective"
         in OpenMC and MCNP.
     """
+
+    if h5m_filename is None or Path(h5m_filename).suffix == ".h5m":
+        pass
+    else:
+        msg = (
+            'The h5m_filename argument should end with ".h5m". The provided '
+            f'h5m_filename "{h5m_filename}" does not end with .h5m')
+        raise ValueError(msg)
+
+    if exo_filename is None or Path(exo_filename).suffix == ".exo":
+        pass
+    else:
+        msg = (
+            'The exo_filename argument should end with ".exo". The provided '
+            f'exo_filename "{exo_filename}" does not end with .exo')
+        raise ValueError(msg)
+
+    if cubit_filename is None or Path(cubit_filename).suffix in [
+            ".cub", ".cub5"]:
+        pass
+    else:
+        msg = (
+            'The cubit_filename argument should end with ".cub" or ".cub5". '
+            f'The provided cubit_filename "{cubit_filename}" does not end '
+            ' with either')
+        raise ValueError(msg)
 
     sys.path.append(cubit_path)
 
@@ -150,6 +176,8 @@ def save_output_files(
 
     if cubit_filename is not None:
         cubit.cmd('save as "' + cubit_filename + '" overwrite')
+
+    Path(h5m_filename).parents[0].mkdir(parents=True, exist_ok=True)
 
     print("using faceting_tolerance of ", faceting_tolerance)
     if make_watertight:
