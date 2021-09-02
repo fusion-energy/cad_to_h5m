@@ -109,12 +109,13 @@ def create_tet_mesh(geometry_details, exo_filename, cubit):
                     "volume " + str(volume) + " size auto factor 6"
                 )  # this number is the size of the mesh 1 is small 10 is large
                 cubit.cmd(
-                    "volume all scheme tetmesh proximity layers off geometric sizing on")
+                    "volume all scheme tetmesh proximity layers off")
                 # example entry ' size 0.5'
                 cubit.cmd(f"volume {str(volume)} " + entry["tet_mesh"])
                 cubit.cmd("mesh volume " + str(volume))
             print('meshed some volumes')
 
+    Path(exo_filename).parents[0].mkdir(parents=True, exist_ok=True)
     cubit.cmd(f'export mesh "{exo_filename}" overwrite')
 
 
