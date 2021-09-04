@@ -140,10 +140,10 @@ def create_tet_mesh(geometry_details, exo_filename, cubit):
 
     cubit.cmd("volume all size auto factor 5")
     for entry in geometry_details:
-        print('entry=',entry)
+        print('entry=', entry)
         if "tet_mesh" in entry.keys():
             for volume in entry["volumes"]:
-                print('volume=',volume)
+                print('volume=', volume)
                 cubit.cmd(
                     "volume " + str(volume) + " size auto factor 6"
                 )  # this number is the size of the mesh 1 is small 10 is large
@@ -157,7 +157,8 @@ def create_tet_mesh(geometry_details, exo_filename, cubit):
 def scale_geometry(cubit, geometry_details):
     for entry in geometry_details:
         if 'scale' in entry.keys():
-            cubit.cmd(f'volume {" ".join(entry["volumes"])}  scale  {entry["scale"]}')
+            cubit.cmd(
+                f'volume {" ".join(entry["volumes"])}  scale  {entry["scale"]}')
 
 
 # def save_tet_details_to_json_file(
@@ -251,6 +252,8 @@ def find_all_surfaces_of_reflecting_wedge(new_vols, cubit):
     return surface_info_dict
 
 # todo additional testing required
+
+
 def find_reflecting_surfaces_of_reflecting_wedge(
     geometry_details, surface_reflectivity_name, cubit
 ):
