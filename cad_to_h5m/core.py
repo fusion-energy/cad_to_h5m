@@ -22,7 +22,7 @@ def cad_to_h5m(
     imprint: bool = True,
     geometry_details_filename: Optional[str] = None,
     surface_reflectivity_name: str = "reflective",
-    exo_filename: str = "tet_mesh.exo",
+    exo_filename: Optional[str] = None,
 ):
     """Converts a CAD files in STP or SAT format into a h5m file for use in
     DAGMC simulations. The h5m file contains material tags associated with the
@@ -36,9 +36,12 @@ def cad_to_h5m(
         a tet mesh of entries by including a "tet_mesh" key in the dictionary.
         The value is passed to the Cubit mesh command. An example entry would be
         "tet_mesh": "size 0.5"
-    h5m_filename: the file name of the output h5m file
+    h5m_filename: the file name of the output h5m file which is suitable for
+        use in DAGMC enabled particle transport codes.
     cubit_filename: the file name of the output cubit file. Should end with .cub
-        or .cub5
+        or .cub5. Includes any tet meshes produced and therefore this output
+        can be useful for producing unstructured meshs for use in DAGMC
+        simulations.
     cubit_path: the path to the Cubit directory used to import Cubit from. On
         Ubuntu with Cubit 2021.5 this would be "/opt/Coreform-Cubit-2021.5/bin/"
     merge_tolerance: The merge tolerance to apply when merging surfaces into
@@ -143,9 +146,6 @@ def create_tet_mesh(geometry_details, exo_filename, cubit):
                 cubit.cmd("mesh volume " + str(volume))
             print('meshed some volumes')
 
-    Path(exo_filename).parents[0].mkdir(parents=True, exist_ok=True)
-    cubit.cmd(f'export mesh "{exo_filename}" overwrite')
-
 
 # def save_tet_details_to_json_file(
 #         geometry_details,
@@ -197,10 +197,13 @@ def save_output_files(
         )
 
     create_tet_mesh(geometry_details, exo_filename, cubit)
+
+    if exo_filename is not None:
+        Path(exo_filename).parents[0].mkdir(parents=True, exist_ok=True)
+        cubit.cmd(f'export mesh "{exo_filename}" overwrite')
+
     if cubit_filename is not None:
         cubit.cmd('save as "' + cubit_filename + '" overwrite')
-
-
 
     return h5m_filename
 
