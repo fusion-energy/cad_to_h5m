@@ -140,6 +140,19 @@ class TestApiUsage(unittest.TestCase):
     def test_exo_file_creation_with_different_sizes(self):
         """Checks that a h5m file is created from stp files"""
 
+        os.system("rm umesh_2.exo")
+
+        cad_to_h5m(
+            files_with_tags=[
+                {
+                    "cad_filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/pf_coils.stp",
+                    "material_tag": "mat1",
+                    "tet_mesh": "size 2"}],
+            exo_filename="umesh_2.exo",
+        )
+
+        assert Path("umesh_2.exo").is_file()
+
         os.system("rm umesh_3.exo")
 
         cad_to_h5m(
@@ -153,21 +166,8 @@ class TestApiUsage(unittest.TestCase):
 
         assert Path("umesh_3.exo").is_file()
 
-        os.system("rm umesh_4.exo")
-
-        cad_to_h5m(
-            files_with_tags=[
-                {
-                    "cad_filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/pf_coils.stp",
-                    "material_tag": "mat1",
-                    "tet_mesh": "size 4"}],
-            exo_filename="umesh_4.exo",
-        )
-
-        assert Path("umesh_4.exo").is_file()
-
-        assert (Path("umesh_4.exo").stat().st_size >
-                Path("umesh_3.exo").stat().st_size)
+        assert (Path("umesh_3.exo").stat().st_size >
+                Path("umesh_2.exo").stat().st_size)
 
     def test_exo_file_creation_with_default_size(self):
         """Checks that a h5m file is created from stp files"""
