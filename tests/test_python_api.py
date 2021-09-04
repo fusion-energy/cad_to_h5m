@@ -153,20 +153,20 @@ class TestApiUsage(unittest.TestCase):
 
         assert Path("umesh_3.exo").is_file()
 
-        os.system("rm umesh_10.exo")
+        os.system("rm umesh_4.exo")
 
         cad_to_h5m(
             files_with_tags=[
                 {
                     "cad_filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/pf_coils.stp",
                     "material_tag": "mat1",
-                    "tet_mesh": "size 10"}],
-            exo_filename="umesh_10.exo",
+                    "tet_mesh": "size 4"}],
+            exo_filename="umesh_4.exo",
         )
 
-        assert Path("umesh_10.exo").is_file()
+        assert Path("umesh_4.exo").is_file()
 
-        assert (Path("umesh_10.exo").stat().st_size >
+        assert (Path("umesh_4.exo").stat().st_size >
                 Path("umesh_3.exo").stat().st_size)
 
     def test_exo_file_creation_with_default_size(self):
@@ -244,7 +244,6 @@ class TestApiUsage(unittest.TestCase):
                 }
             ],
             h5m_filename=test_h5m_filename,
-            make_watertight=False,
         )
 
         assert Path(test_h5m_filename).is_file()
