@@ -94,9 +94,10 @@ cad_to_h5m(
 )
 ```
 
-Creating a EXODUS mesh files compatible with the DAGMC Unstructured  mesh format
-is also possible. Another entry must be added to the ```files_with_tags```
-argument. The following command will produce a ```unstructured_mesh_file.exo```
+Creating a tet mesh files compatible with the OpenMC / DAGMC Unstructured mesh
+format is also possible. Another key called ```tet_mesh``` to the ```files_with_tags``` dictionary will tirgger the meshing of that CAD file.
+The value of the key will be passed to the Cubit mesh command as an instruction.
+The following command will produce a ```unstructured_mesh_file.exo```
 file that can then be used in DAGMC compatable neutronics codes. There are examples
 [1](https://docs.openmc.org/en/latest/examples/unstructured-mesh-part-i.html)
 [2](https://docs.openmc.org/en/latest/examples/unstructured-mesh-part-ii.html) 
@@ -106,12 +107,69 @@ for the use of unstructured meshes in OpenMC.
 from cad_to_h5m import cad_to_h5m
 
 cad_to_h5m(
-    files_with_tags=[{'cad_filename':'part1.sat', 'material_tags':'m1', 'tet_mesh': 'size 0.5'}],
+    files_with_tags=[
+        {
+            'cad_filename':'part1.sat',
+            'material_tags':'m1',
+            'tet_mesh': 'size 0.5'
+        }
+    ],
     h5m_filename='dagmc.h5m',
     cubit_path='/opt/Coreform-Cubit-2021.5/bin/'
     exo_filename='unstructured_mesh_file.exo'
 )
 ```
+
+Use if ```exo``` files requires OpenMC to be compiled with LibMesh. OpenMC also
+accepts DAGMC tet meshes made with MOAB which is another option. The following
+example creates a ```cub``` file that contains a mesh. The MOAB tool 
+```mbconvert``` is then used to extract the tet mesh and save it as a ```h5m```
+file which cna be used in OpenMC as shown in the OpenMC [examples](https://docs.openmc.org/en/stable/examples/unstructured-mesh-part-i.html)
+
+```python
+from cad_to_h5m import cad_to_h5m
+
+cad_to_h5m(
+    files_with_tags=[
+        {
+            'cad_filename':'part1.sat',
+            'material_tags':'m1',
+            'tet_mesh': 'size 0.5'
+        }
+    ],
+    h5m_filename='dagmc.h5m',
+    cubit_path='/opt/Coreform-Cubit-2021.5/bin/'
+    cubit_filename='unstructured_mesh_file.cub'
+)
+```
+mbconvert is a terminal command that is part of MOAB.
+```bash
+mbconvert unstructured_mesh_file.cub unstructured_mesh_file.h5m
+```
+
+Scaling geometry is also possible. This is useful as particle transport codes
+often make use of cm as the default unit. CAD files typically appear in mm as
+the default limit. Some CAD packages ignore units while others make use of them.
+The h5m files are assumed to be in cm by particle transport codes so often it
+is nessecary to scale up or down the geometry. This can be done by adding
+another key called ```scale``` and a value to the ```files_with_tags```
+dictionary. This example multiplies the geometry by 10.
+
+```python
+from cad_to_h5m import cad_to_h5m
+
+cad_to_h5m(
+    files_with_tags=[
+        {
+            'cad_filename':'part1.sat',
+            'material_tags':'m1',
+            'scale': 10
+        }
+    ],
+    h5m_filename='dagmc.h5m',
+)
+```
+
 
 # Installation
 

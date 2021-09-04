@@ -19,6 +19,9 @@ class TestApiUsage(unittest.TestCase):
         tar.extractall("tests")
         tar.close()
 
+        url = "https://raw.githubusercontent.com/fusion-energy/neutronics_workflow/2f65bdeb802f2b1b25da683d13dcd2b29ffc9ed3/example_05_3D_unstructured_mesh_tally/stage_1_output/steel.stp"
+        urllib.request.urlretrieve(url, "tests/steel.stp")
+
     def test_h5m_file_creation(self):
         """Checks that a h5m file is created from stp files when make_watertight
         is set to false"""
@@ -140,34 +143,36 @@ class TestApiUsage(unittest.TestCase):
     def test_exo_file_creation_with_different_sizes(self):
         """Checks that a h5m file is created from stp files"""
 
+        os.system("rm umesh_2.exo")
+
+        cad_to_h5m(
+            files_with_tags=[
+                {
+                    "cad_filename": "tests/steel.stp",
+                    "material_tag": "mat1",
+                    "tet_mesh": "size 2"
+                }],
+            exo_filename="umesh_2.exo",
+        )
+
+        assert Path("umesh_2.exo").is_file()
+
         os.system("rm umesh_3.exo")
 
         cad_to_h5m(
             files_with_tags=[
                 {
-                    "cad_filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/pf_coils.stp",
+                    "cad_filename": "tests/steel.stp",
                     "material_tag": "mat1",
-                    "tet_mesh": "size 3"}],
+                    "tet_mesh": "size 3"
+                }],
             exo_filename="umesh_3.exo",
         )
 
         assert Path("umesh_3.exo").is_file()
 
-        os.system("rm umesh_10.exo")
-
-        cad_to_h5m(
-            files_with_tags=[
-                {
-                    "cad_filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/pf_coils.stp",
-                    "material_tag": "mat1",
-                    "tet_mesh": "size 10"}],
-            exo_filename="umesh_10.exo",
-        )
-
-        assert Path("umesh_10.exo").is_file()
-
-        assert (Path("umesh_10.exo").stat().st_size >
-                Path("umesh_3.exo").stat().st_size)
+        assert (Path("umesh_3.exo").stat().st_size >
+                Path("umesh_2.exo").stat().st_size)
 
     def test_exo_file_creation_with_default_size(self):
         """Checks that a h5m file is created from stp files"""
@@ -226,3 +231,25 @@ class TestApiUsage(unittest.TestCase):
                 cubit_filename="output_file_with.not_correct_suffix",
             )
         self.assertRaises(ValueError, incorrect_suffix)
+
+    def test_h5m_file_creation_with_scaling(self):
+        """Checks that a h5m file is created from stp files when make_watertight
+        is set to false"""
+
+        os.system("rm test_dagmc.h5m")
+
+        test_h5m_filename = "test_dagmc.h5m"
+
+        returned_filename = cad_to_h5m(
+            files_with_tags=[
+                {
+                    "cad_filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/blanket.stp",
+                    "material_tag": "mat1",
+                    "scale": 0.1,
+                }],
+            h5m_filename=test_h5m_filename,
+        )
+
+        assert Path(test_h5m_filename).is_file()
+        assert Path(returned_filename).is_file()
+        assert test_h5m_filename == returned_filename
