@@ -22,7 +22,6 @@ class TestApiUsage(unittest.TestCase):
         url = "https://raw.githubusercontent.com/fusion-energy/neutronics_workflow/2f65bdeb802f2b1b25da683d13dcd2b29ffc9ed3/example_05_3D_unstructured_mesh_tally/stage_1_output/steel.stp"
         urllib.request.urlretrieve(url, "tests/steel.stp")
 
-
     def test_h5m_file_creation(self):
         """Checks that a h5m file is created from stp files when make_watertight
         is set to false"""
