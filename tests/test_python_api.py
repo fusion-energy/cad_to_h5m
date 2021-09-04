@@ -19,6 +19,10 @@ class TestApiUsage(unittest.TestCase):
         tar.extractall("tests")
         tar.close()
 
+        url = "https://raw.githubusercontent.com/fusion-energy/neutronics_workflow/2f65bdeb802f2b1b25da683d13dcd2b29ffc9ed3/example_05_3D_unstructured_mesh_tally/stage_1_output/steel.stp"
+        urllib.request.urlretrieve(url, "tests/steel.stp")
+
+
     def test_h5m_file_creation(self):
         """Checks that a h5m file is created from stp files when make_watertight
         is set to false"""
@@ -145,9 +149,10 @@ class TestApiUsage(unittest.TestCase):
         cad_to_h5m(
             files_with_tags=[
                 {
-                    "cad_filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/pf_coils.stp",
+                    "cad_filename": "tests/steel.stp",
                     "material_tag": "mat1",
-                    "tet_mesh": "size 2"}],
+                    "tet_mesh": "size 2"
+                }],
             exo_filename="umesh_2.exo",
         )
 
@@ -158,9 +163,10 @@ class TestApiUsage(unittest.TestCase):
         cad_to_h5m(
             files_with_tags=[
                 {
-                    "cad_filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/pf_coils.stp",
+                    "cad_filename": "tests/steel.stp",
                     "material_tag": "mat1",
-                    "tet_mesh": "size 3"}],
+                    "tet_mesh": "size 3"
+                }],
             exo_filename="umesh_3.exo",
         )
 
