@@ -9,6 +9,7 @@ class FilesWithTags(TypedDict, total=False):
     filename: str
     material_tag: str
     tet_mesh: str
+    scale: float
 
 
 def cad_to_h5m(
@@ -22,7 +23,7 @@ def cad_to_h5m(
     imprint: bool = True,
     geometry_details_filename: Optional[str] = None,
     surface_reflectivity_name: str = "reflective",
-    exo_filename: str = "tet_mesh.exo",
+    exo_filename: Optional[str] = None,
 ):
     """Converts a CAD files in STP or SAT format into a h5m file for use in
     DAGMC simulations. The h5m file contains material tags associated with the
@@ -35,10 +36,16 @@ def cad_to_h5m(
         "mat2", "cad_filename": "part2.stp"}]. There is also an option to create
         a tet mesh of entries by including a "tet_mesh" key in the dictionary.
         The value is passed to the Cubit mesh command. An example entry would be
-        "tet_mesh": "size 0.5"
-    h5m_filename: the file name of the output h5m file
+        "tet_mesh": "size 0.5". The scale key can also be included to scale up
+        or down the geometry so that it is in cm units as required by most
+        particle transport codes. And example entry would be "scale": 10 which
+        would make the geometry 10 times bigger.
+    h5m_filename: the file name of the output h5m file which is suitable for
+        use in DAGMC enabled particle transport codes.
     cubit_filename: the file name of the output cubit file. Should end with .cub
-        or .cub5
+        or .cub5. Includes any tet meshes produced and therefore this output
+        can be useful for producing unstructured meshs for use in DAGMC
+        simulations.
     cubit_path: the path to the Cubit directory used to import Cubit from. On
         Ubuntu with Cubit 2021.5 this would be "/opt/Coreform-Cubit-2021.5/bin/"
     merge_tolerance: The merge tolerance to apply when merging surfaces into
@@ -100,17 +107,20 @@ def cad_to_h5m(
     geometry_details, total_number_of_volumes = find_number_of_volumes_in_each_step_file(
         files_with_tags, cubit)
     print(geometry_details)
+
+    scale_geometry(cubit, geometry_details)
+
     tag_geometry_with_mats(geometry_details, cubit)
 
     if imprint and total_number_of_volumes > 1:
         imprint_geometry(cubit)
     if total_number_of_volumes > 1:
         merge_geometry(merge_tolerance, cubit)
+
+    # TODO method requires further testing
     find_reflecting_surfaces_of_reflecting_wedge(
         geometry_details, surface_reflectivity_name, cubit
     )
-
-    create_tet_mesh(geometry_details, exo_filename, cubit)
 
     save_output_files(
         make_watertight,
@@ -119,6 +129,7 @@ def cad_to_h5m(
         cubit_filename,
         geometry_details_filename,
         faceting_tolerance,
+        exo_filename,
         cubit,
     )
     return h5m_filename
@@ -129,19 +140,25 @@ def create_tet_mesh(geometry_details, exo_filename, cubit):
 
     cubit.cmd("volume all size auto factor 5")
     for entry in geometry_details:
+        print('entry=', entry)
         if "tet_mesh" in entry.keys():
             for volume in entry["volumes"]:
+                print('volume=', volume)
                 cubit.cmd(
                     "volume " + str(volume) + " size auto factor 6"
                 )  # this number is the size of the mesh 1 is small 10 is large
-                cubit.cmd(
-                    "volume all scheme tetmesh proximity layers off geometric sizing on")
+                cubit.cmd("volume all scheme tetmesh proximity layers off")
                 # example entry ' size 0.5'
-                cubit.cmd(f"volume {str(volume)} " + entry["tet_mesh"])
+                cubit.cmd(f"volume {volume} " + entry["tet_mesh"])
                 cubit.cmd("mesh volume " + str(volume))
             print('meshed some volumes')
 
-    cubit.cmd(f'export mesh "{exo_filename}" overwrite')
+
+def scale_geometry(cubit, geometry_details):
+    for entry in geometry_details:
+        if 'scale' in entry.keys():
+            cubit.cmd(
+                f'volume {" ".join(entry["volumes"])}  scale  {entry["scale"]}')
 
 
 # def save_tet_details_to_json_file(
@@ -164,6 +181,7 @@ def save_output_files(
     cubit_filename,
     geometry_details_filename,
     faceting_tolerance,
+    exo_filename,
     cubit,
 ):
     """This saves the output files"""
@@ -172,9 +190,6 @@ def save_output_files(
     if geometry_details_filename is not None:
         with open(geometry_details_filename, "w") as outfile:
             json.dump(geometry_details, outfile, indent=4)
-
-    if cubit_filename is not None:
-        cubit.cmd('save as "' + cubit_filename + '" overwrite')
 
     Path(h5m_filename).parents[0].mkdir(parents=True, exist_ok=True)
 
@@ -194,6 +209,16 @@ def save_output_files(
             + '" faceting_tolerance '
             + str(faceting_tolerance)
         )
+
+    create_tet_mesh(geometry_details, exo_filename, cubit)
+
+    if exo_filename is not None:
+        Path(exo_filename).parents[0].mkdir(parents=True, exist_ok=True)
+        cubit.cmd(f'export mesh "{exo_filename}" overwrite')
+
+    if cubit_filename is not None:
+        cubit.cmd('save as "' + cubit_filename + '" overwrite')
+
     return h5m_filename
 
 
@@ -225,6 +250,8 @@ def find_all_surfaces_of_reflecting_wedge(new_vols, cubit):
             surface_info_dict[surface_id] = {"reflector": False}
     print("surface_info_dict", surface_info_dict)
     return surface_info_dict
+
+# todo additional testing required
 
 
 def find_reflecting_surfaces_of_reflecting_wedge(
