@@ -9,6 +9,7 @@ class FilesWithTags(TypedDict, total=False):
     filename: str
     material_tag: str
     tet_mesh: str
+    scale: float
 
 
 def cad_to_h5m(
@@ -35,7 +36,10 @@ def cad_to_h5m(
         "mat2", "cad_filename": "part2.stp"}]. There is also an option to create
         a tet mesh of entries by including a "tet_mesh" key in the dictionary.
         The value is passed to the Cubit mesh command. An example entry would be
-        "tet_mesh": "size 0.5"
+        "tet_mesh": "size 0.5". The scale key can also be included to scale up
+        or down the geometry so that it is in cm units as required by most
+        particle transport codes. And example entry would be "scale": 10 which
+        would make the geometry 10 times bigger.
     h5m_filename: the file name of the output h5m file which is suitable for
         use in DAGMC enabled particle transport codes.
     cubit_filename: the file name of the output cubit file. Should end with .cub
@@ -103,6 +107,9 @@ def cad_to_h5m(
     geometry_details, total_number_of_volumes = find_number_of_volumes_in_each_step_file(
         files_with_tags, cubit)
     print(geometry_details)
+
+    scale_geometry(cubit, geometry_details)
+
     tag_geometry_with_mats(geometry_details, cubit)
 
     if imprint and total_number_of_volumes > 1:
@@ -145,6 +152,12 @@ def create_tet_mesh(geometry_details, exo_filename, cubit):
                 cubit.cmd(f"volume {volume} " + entry["tet_mesh"])
                 cubit.cmd("mesh volume " + str(volume))
             print('meshed some volumes')
+
+
+def scale_geometry(cubit, geometry_details):
+    for entry in geometry_details:
+        if 'scale' in entry.keys():
+            cubit.cmd(f'volume {" ".join(entry["volumes"])}  scale  {entry["scale"]}')
 
 
 # def save_tet_details_to_json_file(
