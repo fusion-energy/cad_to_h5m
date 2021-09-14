@@ -75,6 +75,7 @@ COPY requirements-test.txt requirements-test.txt
 RUN pip install -r requirements-test.txt
 RUN conda install -c conda-forge moab
 
+
 FROM dependencies as final
 
 COPY setup.py setup.py
@@ -85,3 +86,4 @@ COPY tests tests/
 COPY examples/*.py examples/
 
 RUN python setup.py install
+

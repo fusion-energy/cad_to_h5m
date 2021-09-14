@@ -197,8 +197,5 @@ method of installing is via pip.
 pip install cad_to_h5m
 ```
 
-[Cubit](https://coreform.com/products/coreform-cubit/) needs to be installed
-separately to make full use of this package.
-
-The [Svalinn Cubit Plugin](https://github.com/svalinn/Cubit-plugin) also needs
-to be installed separately to make full use of this package.
+Some Python dependencies (such as Numpy) are installed during the ```pip install cad_to_h5m``` process, however [Cubit](https://coreform.com/products/coreform-cubit/) needs
+to be installed seperatly to make full use of this package.
