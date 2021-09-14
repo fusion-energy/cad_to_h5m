@@ -23,6 +23,7 @@ jobs:
       - name: install package
         run: |
           apt-get install -y sudo
+          apt-get install -y python3-pip
           sudo -H pip install -r requirements-test.txt
           python setup.py install
 
