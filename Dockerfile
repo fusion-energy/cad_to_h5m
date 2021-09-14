@@ -71,6 +71,8 @@ RUN printf 'Fri May 28 2021' >> /root/.config/Coreform/licenses/cubit-learn.lic
 # helps to identify Cubit related errrors
 ENV CUBIT_VERBOSE=5
 
+COPY requirements-test.txt requirements-test.txt
+RUN pip install -r requirements-test.txt
 
 FROM dependencies as final
 
