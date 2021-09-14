@@ -49,6 +49,18 @@ It is also possible to convert .sat files in the following way.
 cad-to-h5m -i part1.sat -o dagmc.h5m -t mat:1 -c /opt/Coreform-Cubit-2021.5/bin/
 ``` -->
 
+# Installation
+
+The package is available via the PyPi package manager and the recommended
+method of installing is via pip.
+```bash
+pip install cad_to_h5m
+```
+
+In addition [Cubit](https://coreform.com/products/coreform-cubit/) and the 
+[Svalinn Plugin](https://github.com/svalinn/Cubit-plugin) needs to be
+installed to make full use of this package.
+
 # Python API usage
 
 Creating a h5m file from a single STP file called ```part1.stp``` and applying
@@ -142,10 +154,21 @@ cad_to_h5m(
     cubit_filename='unstructured_mesh_file.cub'
 )
 ```
-mbconvert is a terminal command that is part of MOAB.
+The ```cub``` file produced contains a tet mesh as well as the faceted geometry.
+The tet mesh can be extracted and converted to another ```h5m``` file for use in
+openmc. MOAB is needed to convert the file and includes the command line tool
+```mbconvert```, MOAB can be installed into a conda environment with:
+
+```
+conda install -c conda-forge moab
+```
+Then ```mbconvert``` can be used to extract and convert the tet mesh from the
+```cub``` file into a ```h5m``` file.
+
 ```bash
 mbconvert unstructured_mesh_file.cub unstructured_mesh_file.h5m
 ```
+
 
 Scaling geometry is also possible. This is useful as particle transport codes
 often make use of cm as the default unit. CAD files typically appear in mm as
@@ -189,13 +212,3 @@ cad_to_h5m(
     implicit_complement_material_tag = 'm2'
 )
 ```
-# Installation
-
-The package is available via the PyPi package manager and the recommended
-method of installing is via pip.
-```bash
-pip install cad_to_h5m
-```
-
-Some Python dependencies (such as Numpy) are installed during the ```pip install cad_to_h5m``` process, however [Cubit](https://coreform.com/products/coreform-cubit/) needs
-to be installed seperatly to make full use of this package.
