@@ -24,7 +24,7 @@ jobs:
         run: |
           apt-get install -y sudo
           apt-get install -y python3-pip
-          sudo -H pip install -r requirements-test.txt
+          sudo -H pip3 install -r requirements-test.txt
           python setup.py install
 
       - name: Run test_utils
