@@ -150,7 +150,7 @@ class TestApiUsage(unittest.TestCase):
                 {
                     "cad_filename": "tests/steel.stp",
                     "material_tag": "mat1",
-                    "tet_mesh": "size 8"
+                    "tet_mesh": "size 2"
                 }],
             exo_filename="umesh_2.exo",
         )
@@ -164,7 +164,7 @@ class TestApiUsage(unittest.TestCase):
                 {
                     "cad_filename": "tests/steel.stp",
                     "material_tag": "mat1",
-                    "tet_mesh": "size 9"
+                    "tet_mesh": "size 3"
                 }],
             exo_filename="umesh_3.exo",
         )
