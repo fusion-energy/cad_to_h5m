@@ -148,7 +148,8 @@ class TestApiUsage(unittest.TestCase):
         cad_to_h5m(
             files_with_tags=[
                 {
-                    "cad_filename": "tests/steel.stp",
+                    "cad_filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/pf_coils.stp",
+                    # "cad_filename": "tests/steel.stp",
                     "material_tag": "mat1",
                     "tet_mesh": "size 2"
                 }],
@@ -162,7 +163,8 @@ class TestApiUsage(unittest.TestCase):
         cad_to_h5m(
             files_with_tags=[
                 {
-                    "cad_filename": "tests/steel.stp",
+                    "cad_filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/pf_coils.stp",
+                    # "cad_filename": "tests/steel.stp",
                     "material_tag": "mat1",
                     "tet_mesh": "size 3"
                 }],
