@@ -150,8 +150,7 @@ class TestApiUsage(unittest.TestCase):
                 {
                     "cad_filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/pf_coils.stp",
                     "material_tag": "mat1",
-                    "tet_mesh": "size 2"
-                }],
+                    "tet_mesh": "size 2"}],
             exo_filename="umesh_2.exo",
         )
 
@@ -164,8 +163,7 @@ class TestApiUsage(unittest.TestCase):
                 {
                     "cad_filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/pf_coils.stp",
                     "material_tag": "mat1",
-                    "tet_mesh": "size 3"
-                }],
+                    "tet_mesh": "size 3"}],
             exo_filename="umesh_3.exo",
         )
 
