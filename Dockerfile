@@ -80,7 +80,7 @@ COPY run_tests.sh run_tests.sh
 COPY cad_to_h5m cad_to_h5m/
 COPY tests tests/
 COPY examples/*.py examples/
+COPY requirements-test.txt requirements-test.txt
 
-RUN pip install dagmc_h5m_file_inspector  # needed for testing only
+RUN pip install -r requirements-test.txt
 RUN python setup.py install
-
