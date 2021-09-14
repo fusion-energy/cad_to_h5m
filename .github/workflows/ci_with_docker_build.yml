@@ -1,4 +1,4 @@
-# Builds a dockerimage and then runs tests from within the docker enviroment
+# Builds a dockerimage and then runs tests from within the docker environment
 
 name: CI with docker build
 on:
