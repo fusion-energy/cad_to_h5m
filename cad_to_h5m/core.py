@@ -24,6 +24,7 @@ def cad_to_h5m(
     geometry_details_filename: Optional[str] = None,
     surface_reflectivity_name: str = "reflective",
     exo_filename: Optional[str] = None,
+    implicit_complement_material_tag: Optional[str] = None
 ):
     """Converts a CAD files in STP or SAT format into a h5m file for use in
     DAGMC simulations. The h5m file contains material tags associated with the
@@ -63,6 +64,8 @@ def cad_to_h5m(
     surface_reflectivity_name: The DAGMC tag name to associate with reflecting
         surfaces. This changes for some neutronics codes but is "reflective"
         in OpenMC and MCNP.
+    implicit_complement_material_tag: Material tag to be assigned to the
+        implicit complement. Defaults to vacuum.
     """
 
     if h5m_filename is None or Path(h5m_filename).suffix == ".h5m":
@@ -110,7 +113,9 @@ def cad_to_h5m(
 
     scale_geometry(cubit, geometry_details)
 
-    tag_geometry_with_mats(geometry_details, cubit)
+    tag_geometry_with_mats(
+        geometry_details, implicit_complement_material_tag,cubit
+    )
 
     if imprint and total_number_of_volumes > 1:
         imprint_geometry(cubit)
@@ -294,7 +299,9 @@ def find_reflecting_surfaces_of_reflecting_wedge(
     return geometry_details, wedge_volume
 
 
-def tag_geometry_with_mats(geometry_details, cubit):
+def tag_geometry_with_mats(
+    geometry_details, implicit_complement_material_tag, cubit
+):
     for entry in geometry_details:
         if "material_tag" in entry.keys():
 
@@ -310,6 +317,12 @@ def tag_geometry_with_mats(geometry_details, cubit):
                 + '" add volume '
                 + " ".join(entry["volumes"])
             )
+            if entry['material_tag'].lower() == 'graveyard':
+                if implicit_complement_material_tag is not None:
+                    graveyard_volume_number = entry["volumes"][0]
+                    cubit.cmd(
+f'group "mat:{implicit_complement_material_tag}_comp" add vol {graveyard_volume_number}'
+                    )
         else:
             msg = f"dictionary key material_tag is missing for {entry}"
             raise ValueError(msg)

@@ -58,7 +58,7 @@ a material tag to the volume.
 from cad_to_h5m import cad_to_h5m
 
 cad_to_h5m(
-    files_with_tags=[{'cad_filename':'part1.stp', 'material_tags':'m1'}],
+    files_with_tags=[{'cad_filename':'part1.stp', 'material_tag':'m1'}],
     h5m_filename='dagmc.h5m',
     cubit_path='/opt/Coreform-Cubit-2021.5/bin/'
 )
@@ -73,8 +73,8 @@ from cad_to_h5m import cad_to_h5m
 
 cad_to_h5m(
     files_with_tags=[
-        {'cad_filename':'part1.stp', 'material_tags':'m1'},
-        {'cad_filename':'part2.stp', 'material_tags':'m2'}
+        {'cad_filename':'part1.stp', 'material_tag':'m1'},
+        {'cad_filename':'part2.stp', 'material_tag':'m2'}
     ],
     h5m_filename='dagmc.h5m',
     cubit_path='/opt/Coreform-Cubit-2021.5/bin/'
@@ -88,7 +88,7 @@ extension.
 from cad_to_h5m import cad_to_h5m
 
 cad_to_h5m(
-    files_with_tags=[{'cad_filename':'part1.sat', 'material_tags':'m1'}],
+    files_with_tags=[{'cad_filename':'part1.sat', 'material_tag':'m1'}],
     h5m_filename='dagmc.h5m',
     cubit_path='/opt/Coreform-Cubit-2021.5/bin/'
 )
@@ -110,7 +110,7 @@ cad_to_h5m(
     files_with_tags=[
         {
             'cad_filename':'part1.sat',
-            'material_tags':'m1',
+            'material_tag':'m1',
             'tet_mesh': 'size 0.5'
         }
     ],
@@ -133,12 +133,12 @@ cad_to_h5m(
     files_with_tags=[
         {
             'cad_filename':'part1.sat',
-            'material_tags':'m1',
+            'material_tag':'m1',
             'tet_mesh': 'size 0.5'
         }
     ],
     h5m_filename='dagmc.h5m',
-    cubit_path='/opt/Coreform-Cubit-2021.5/bin/'
+    cubit_path='/opt/Coreform-Cubit-2021.5/bin/',
     cubit_filename='unstructured_mesh_file.cub'
 )
 ```
@@ -162,7 +162,7 @@ cad_to_h5m(
     files_with_tags=[
         {
             'cad_filename':'part1.sat',
-            'material_tags':'m1',
+            'material_tag':'m1',
             'scale': 10
         }
     ],
@@ -170,7 +170,25 @@ cad_to_h5m(
 )
 ```
 
+Assigning a material to the implicit complement is also possible. This can be useful 
+on large complex geometries where boolean operations can result in robustness issues. 
+This is implemented by assigning the desired material tag of the implicit complement to the 
+optional ```implicit_complement_material_tag``` argument. Defaults to vacuum.
 
+```python
+from cad_to_h5m import cad_to_h5m
+
+cad_to_h5m(
+    files_with_tags=[
+        {
+            'cad_filename':'part1.sat',
+            'material_tag':'m1',
+        }
+    ],
+    h5m_filename='dagmc.h5m',
+    implicit_complement_material_tag = 'm2'
+)
+```
 # Installation
 
 The package is available via the PyPi package manager and the recommended
