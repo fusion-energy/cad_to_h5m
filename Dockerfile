@@ -81,5 +81,6 @@ COPY cad_to_h5m cad_to_h5m/
 COPY tests tests/
 COPY examples/*.py examples/
 
+RUN pip install dagmc_h5m_file_inspector  # needed for testing only
 RUN python setup.py install
 

@@ -22,6 +22,7 @@ jobs:
       
       - name: install package
         run: |
+          pip install dagmc_h5m_file_inspector  # needed for testing only
           python setup.py install
 
       - name: Run test_utils

@@ -26,6 +26,7 @@ setuptools.setup(
     ],
     tests_require=[
         "pytest",
+         "dagmc_h5m_file_inspector"
     ],
     python_requires='>=3.6',
     install_requires=["pytest"],
