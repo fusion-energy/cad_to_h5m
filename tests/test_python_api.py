@@ -6,6 +6,7 @@ from pathlib import Path
 
 import pytest
 from cad_to_h5m import cad_to_h5m
+import dagmc_h5m_file_inspector as di
 
 
 class TestApiUsage(unittest.TestCase):
