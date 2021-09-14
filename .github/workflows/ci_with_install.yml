@@ -22,7 +22,7 @@ jobs:
       
       - name: install package
         run: |
-          pip install -r requirements-test.txt
+          pip install -r requirements-test.txt --user
           python setup.py install
 
       - name: Run test_utils
