@@ -269,7 +269,7 @@ class TestApiUsage(unittest.TestCase):
                     "cad_filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/blanket.stp",
                     "material_tag": "mat1",
                 }],
-            implicit_complement_material_tag = implicit_complement_material,
+            implicit_complement_material_tag=implicit_complement_material,
             h5m_filename=test_h5m_filename,
         )
 

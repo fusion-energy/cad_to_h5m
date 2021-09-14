@@ -114,7 +114,7 @@ def cad_to_h5m(
     scale_geometry(cubit, geometry_details)
 
     tag_geometry_with_mats(
-        geometry_details, implicit_complement_material_tag,cubit
+        geometry_details, implicit_complement_material_tag, cubit
     )
 
     if imprint and total_number_of_volumes > 1:
@@ -321,7 +321,7 @@ def tag_geometry_with_mats(
                 if implicit_complement_material_tag is not None:
                     graveyard_volume_number = entry["volumes"][0]
                     cubit.cmd(
-f'group "mat:{implicit_complement_material_tag}_comp" add vol {graveyard_volume_number}'
+                        f'group "mat:{implicit_complement_material_tag}_comp" add vol {graveyard_volume_number}'
                     )
         else:
             msg = f"dictionary key material_tag is missing for {entry}"
