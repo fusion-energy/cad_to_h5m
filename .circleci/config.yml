@@ -18,7 +18,7 @@ jobs:
       - run:
           name: run utils tests
           command:
-            pytest tests/test_python_api.py -vv
+            pytest tests/test_python_api.py -v
 
 workflows:
   version: 2
