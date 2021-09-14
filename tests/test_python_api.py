@@ -4,7 +4,6 @@ import unittest
 import urllib.request
 from pathlib import Path
 
-import dagmc_h5m_file_inspector as di
 import pytest
 from cad_to_h5m import cad_to_h5m
 
@@ -275,9 +274,6 @@ class TestApiUsage(unittest.TestCase):
             h5m_filename=test_h5m_filename,
         )
 
-        materials_in_h5m = di.get_materials_from_h5m(test_h5m_filename)
-
         assert Path(test_h5m_filename).is_file()
         assert Path(returned_filename).is_file()
         assert test_h5m_filename == returned_filename
-        assert implicit_complement_material in materials_in_h5m

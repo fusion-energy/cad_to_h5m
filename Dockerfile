@@ -73,8 +73,6 @@ ENV CUBIT_VERBOSE=5
 
 COPY requirements-test.txt requirements-test.txt
 RUN pip install -r requirements-test.txt
-RUN conda install -c conda-forge moab
-
 
 FROM dependencies as final
 
