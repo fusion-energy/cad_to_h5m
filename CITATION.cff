@@ -8,6 +8,7 @@ authors:
   given-names: "Luke"
 - family-names: "Gray"
   given-names: "Ander"
+  orcid: "https://orcid.org/0000-0002-1585-0900"
 title: "cad-to-h5m"
 version: 0.3.0
 date-released: 2021-9-15
