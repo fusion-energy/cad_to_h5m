@@ -45,7 +45,7 @@ def cad_to_h5m(
         use in DAGMC enabled particle transport codes.
     cubit_filename: the file name of the output cubit file. Should end with .cub
         or .cub5. Includes any tet meshes produced and therefore this output
-        can be useful for producing unstructured meshs for use in DAGMC
+        can be useful for producing unstructured meshes for use in DAGMC
         simulations.
     cubit_path: the path to the Cubit directory used to import Cubit from. On
         Ubuntu with Cubit 2021.5 this would be "/opt/Coreform-Cubit-2021.5/bin/"
@@ -101,7 +101,7 @@ def cad_to_h5m(
     except ImportError:
         msg = (
             "import cubit failed, cubit was not importable from the "
-            "provided path {cubit_path}"
+            f"provided path {cubit_path}"
         )
         raise ImportError(msg)
 
@@ -111,7 +111,7 @@ def cad_to_h5m(
         files_with_tags, cubit)
     print(geometry_details)
 
-    scale_geometry(cubit, geometry_details)
+    scale_geometry(geometry_details, cubit)
 
     tag_geometry_with_mats(
         geometry_details, implicit_complement_material_tag, cubit
@@ -140,15 +140,13 @@ def cad_to_h5m(
     return h5m_filename
 
 
-def create_tet_mesh(geometry_details, exo_filename, cubit):
+def create_tet_mesh(geometry_details, cubit):
     cubit.cmd("Trimesher volume gradation 1.3")
 
     cubit.cmd("volume all size auto factor 5")
     for entry in geometry_details:
-        print('entry=', entry)
         if "tet_mesh" in entry.keys():
             for volume in entry["volumes"]:
-                print('volume=', volume)
                 cubit.cmd(
                     "volume " + str(volume) + " size auto factor 6"
                 )  # this number is the size of the mesh 1 is small 10 is large
@@ -156,16 +154,15 @@ def create_tet_mesh(geometry_details, exo_filename, cubit):
                 # example entry ' size 0.5'
                 cubit.cmd(f"volume {volume} " + entry["tet_mesh"])
                 cubit.cmd("mesh volume " + str(volume))
-            print('meshed some volumes')
 
 
-def scale_geometry(cubit, geometry_details):
+def scale_geometry(geometry_details: dict, cubit):
     for entry in geometry_details:
         if 'scale' in entry.keys():
             cubit.cmd(
                 f'volume {" ".join(entry["volumes"])}  scale  {entry["scale"]}')
 
-
+# TODO implent a flag to allow tet file info to be saved
 # def save_tet_details_to_json_file(
 #         geometry_details,
 #         filename="mesh_details.json"):
@@ -180,13 +177,13 @@ def scale_geometry(cubit, geometry_details):
 #         json.dump(geometry_details, outfile, indent=4)
 
 def save_output_files(
-    make_watertight,
-    geometry_details,
-    h5m_filename,
-    cubit_filename,
-    geometry_details_filename,
-    faceting_tolerance,
-    exo_filename,
+    make_watertight: bool,
+    geometry_details: dict,
+    h5m_filename: str,
+    cubit_filename: str,
+    geometry_details_filename: str,
+    faceting_tolerance: float,
+    exo_filename: str,
     cubit,
 ):
     """This saves the output files"""
@@ -215,7 +212,7 @@ def save_output_files(
             + str(faceting_tolerance)
         )
 
-    create_tet_mesh(geometry_details, exo_filename, cubit)
+    create_tet_mesh(geometry_details, cubit)
 
     if exo_filename is not None:
         Path(exo_filename).parents[0].mkdir(parents=True, exist_ok=True)
@@ -231,11 +228,16 @@ def imprint_geometry(cubit):
     cubit.cmd("imprint body all")
 
 
-def merge_geometry(merge_tolerance, cubit):
-    # optional as there is a default
+def merge_geometry(merge_tolerance: float, cubit):
+    """merges the geometry with te specified tolerance
+    
+    Args:
+        merge_tolerance: The allowable distance between surfaces before merging
+            them together. Optional as there is a default built into the DAGMC
+            export command
+    """
     cubit.cmd(f"merge tolerance {merge_tolerance}")
     cubit.cmd("merge vol all group_results")
-    cubit.cmd("graphics tol angle 3")
 
 
 def find_all_surfaces_of_reflecting_wedge(new_vols, cubit):
@@ -255,8 +257,6 @@ def find_all_surfaces_of_reflecting_wedge(new_vols, cubit):
             surface_info_dict[surface_id] = {"reflector": False}
     print("surface_info_dict", surface_info_dict)
     return surface_info_dict
-
-# todo additional testing required
 
 
 def find_reflecting_surfaces_of_reflecting_wedge(
@@ -330,15 +330,9 @@ def tag_geometry_with_mats(
 
 def find_number_of_volumes_in_each_step_file(files_with_tags, cubit):
     """ """
-    body_ids = ""
-    volumes_in_each_step_file = []
-    # all_groups=cubit.parse_cubit_list("group","all")
-    # starting_group_id = len(all_groups)
     for entry in files_with_tags:
-        print(entry)
-        # starting_group_id = starting_group_id +1
+        print(f'loading {entry["cad_filename"]}')
         current_vols = cubit.parse_cubit_list("volume", "all")
-        # print(os.path.join(basefolder, entry['cad_filename']))
         if entry["cad_filename"].endswith(
                 ".stp") or entry["cad_filename"].endswith(".step"):
             import_type = "step"
@@ -352,8 +346,6 @@ def find_number_of_volumes_in_each_step_file(files_with_tags, cubit):
             msg = f'File with filename {entry["cad_filename"]} could not be found'
             raise FileNotFoundError(msg)
         short_file_name = os.path.split(entry["cad_filename"])[-1]
-        # print('short_file_name',short_file_name)
-        # cubit.cmd('import '+import_type+' "' + entry['stp_filename'] + '" separate_bodies no_surfaces no_curves no_vertices group "'+str(short_file_name)+'"')
         cubit.cmd(
             "import "
             + import_type
@@ -364,11 +356,6 @@ def find_number_of_volumes_in_each_step_file(files_with_tags, cubit):
         all_vols = cubit.parse_cubit_list("volume", "all")
         new_vols = set(current_vols).symmetric_difference(set(all_vols))
         new_vols = list(map(str, new_vols))
-        print("new_vols", new_vols, type(new_vols))
-        current_bodies = cubit.parse_cubit_list("body", "all")
-        print("current_bodies", current_bodies)
-        # volumes_in_group = cubit.cmd('volume in group '+str(starting_group_id))
-        # print('volumes_in_group',volumes_in_group,type(volumes_in_group))
         if len(new_vols) > 1:
             cubit.cmd(
                 "unite vol " +
@@ -393,5 +380,9 @@ def find_number_of_volumes_in_each_step_file(files_with_tags, cubit):
                 "entry['surface_reflectivity']",
                 entry["surface_reflectivity"])
     cubit.cmd("separate body all")
+
+    # checks the cad is clean and catches some errors with the geometry early
+    cubit.cmd("validate vol all")
+    cubit.cmd("autoheal analyze vol all")
 
     return files_with_tags, sum(all_vols)
