@@ -176,6 +176,7 @@ def scale_geometry(geometry_details: dict, cubit):
 #     with open(filename, "w") as outfile:
 #         json.dump(geometry_details, outfile, indent=4)
 
+
 def save_output_files(
     make_watertight: bool,
     geometry_details: dict,
@@ -230,7 +231,7 @@ def imprint_geometry(cubit):
 
 def merge_geometry(merge_tolerance: float, cubit):
     """merges the geometry with te specified tolerance
-    
+
     Args:
         merge_tolerance: The allowable distance between surfaces before merging
             them together. Optional as there is a default built into the DAGMC
