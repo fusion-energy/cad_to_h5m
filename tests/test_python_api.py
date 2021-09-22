@@ -4,23 +4,27 @@ import unittest
 import urllib.request
 from pathlib import Path
 
-import pytest
 from cad_to_h5m import cad_to_h5m
 
 
 class TestApiUsage(unittest.TestCase):
     def setUp(self):
 
-        if not Path("tests/v0.0.1.tar.gz").is_file():
+        if not Path("tests/v0.0.2.tar.gz").is_file():
             url = "https://github.com/Shimwell/fusion_example_for_openmc_using_paramak/archive/refs/tags/v0.0.1.tar.gz"
             urllib.request.urlretrieve(url, "tests/v0.0.1.tar.gz")
 
-        tar = tarfile.open("tests/v0.0.1.tar.gz", "r:gz")
-        tar.extractall("tests")
-        tar.close()
+            tar = tarfile.open("tests/v0.0.1.tar.gz", "r:gz")
+            tar.extractall("tests")
+            tar.close()
 
-        url = "https://raw.githubusercontent.com/fusion-energy/neutronics_workflow/main/example_01_single_volume_cell_tally/stage_1_output/steel.stp"
-        urllib.request.urlretrieve(url, "tests/steel.stp")
+        if not Path("tests/v0.0.2.tar.gz").is_file():
+            url = "https://github.com/fusion-energy/neutronics_workflow/archive/refs/tags/v0.0.2.tar.gz"
+            urllib.request.urlretrieve(url, "tests/v0.0.2.tar.gz")
+
+            tar = tarfile.open("tests/v0.0.2.tar.gz", "r:gz")
+            tar.extractall("tests")
+            tar.close()
 
     def test_h5m_file_creation(self):
         """Checks that a h5m file is created from stp files when make_watertight
@@ -148,10 +152,9 @@ class TestApiUsage(unittest.TestCase):
         cad_to_h5m(
             files_with_tags=[
                 {
-                    "cad_filename": "tests/steel.stp",
+                    "cad_filename": "tests/neutronics_workflow-0.0.2/example_01_single_volume_cell_tally/stage_1_output/steel.stp",
                     "material_tag": "mat1",
-                    "tet_mesh": "size 2"
-                }],
+                    "tet_mesh": "size 2"}],
             exo_filename="umesh_2.exo",
         )
 
@@ -162,10 +165,9 @@ class TestApiUsage(unittest.TestCase):
         cad_to_h5m(
             files_with_tags=[
                 {
-                    "cad_filename": "tests/steel.stp",
+                    "cad_filename": "tests/neutronics_workflow-0.0.2/example_01_single_volume_cell_tally/stage_1_output/steel.stp",
                     "material_tag": "mat1",
-                    "tet_mesh": "size 3"
-                }],
+                    "tet_mesh": "size 3"}],
             exo_filename="umesh_3.exo",
         )
 
