@@ -16,5 +16,5 @@ files_with_tags = my_shape.neutronics_description()
 cad_to_h5m(
     h5m_filename=' "dagmc.h5m',
     cubit_path="/opt/Coreform-Cubit-2021.5/bin/",
-    files_with_tags=files_with_tags
+    files_with_tags=files_with_tags,
 )
