@@ -143,10 +143,10 @@ def cad_to_h5m(
         cubit,
         verbose,
     )
-    
-    #resets cubit workspace
+
+    # resets cubit workspace
     cubit.cmd('reset')
-    
+
     return h5m_filename
 
 
