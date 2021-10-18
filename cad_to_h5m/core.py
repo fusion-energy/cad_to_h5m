@@ -24,7 +24,8 @@ def cad_to_h5m(
     geometry_details_filename: Optional[str] = None,
     surface_reflectivity_name: str = "reflective",
     exo_filename: Optional[str] = None,
-    implicit_complement_material_tag: Optional[str] = None
+    implicit_complement_material_tag: Optional[str] = None,
+    verbose: bool = True
 ):
     """Converts a CAD files in STP or SAT format into a h5m file for use in
     DAGMC simulations. The h5m file contains material tags associated with the
@@ -106,10 +107,14 @@ def cad_to_h5m(
         raise ImportError(msg)
 
     cubit.init([])
+    if not verbose:
+        cubit.cmd('set echo off')
+        cubit.cmd('set info off')
+        cubit.cmd('set journal off')
+        cubit.cmd('set warning off')
 
     geometry_details, total_number_of_volumes = find_number_of_volumes_in_each_step_file(
-        files_with_tags, cubit)
-    print(geometry_details)
+        files_with_tags, cubit, verbose)
 
     scale_geometry(geometry_details, cubit)
 
@@ -124,7 +129,7 @@ def cad_to_h5m(
 
     # TODO method requires further testing
     find_reflecting_surfaces_of_reflecting_wedge(
-        geometry_details, surface_reflectivity_name, cubit
+        geometry_details, surface_reflectivity_name, cubit, verbose
     )
 
     save_output_files(
@@ -136,7 +141,12 @@ def cad_to_h5m(
         faceting_tolerance,
         exo_filename,
         cubit,
+        verbose,
     )
+
+    # resets cubit workspace
+    cubit.cmd('reset')
+
     return h5m_filename
 
 
@@ -186,6 +196,7 @@ def save_output_files(
     faceting_tolerance: float,
     exo_filename: str,
     cubit,
+    verbose: bool
 ):
     """This saves the output files"""
     cubit.cmd("set attribute on")
@@ -195,8 +206,8 @@ def save_output_files(
             json.dump(geometry_details, outfile, indent=4)
 
     Path(h5m_filename).parents[0].mkdir(parents=True, exist_ok=True)
-
-    print("using faceting_tolerance of ", faceting_tolerance)
+    if verbose:
+        print("using faceting_tolerance of ", faceting_tolerance)
     if make_watertight:
         cubit.cmd(
             'export dagmc "'
@@ -241,7 +252,7 @@ def merge_geometry(merge_tolerance: float, cubit):
     cubit.cmd("merge vol all group_results")
 
 
-def find_all_surfaces_of_reflecting_wedge(new_vols, cubit):
+def find_all_surfaces_of_reflecting_wedge(new_vols, cubit, verbose: bool):
     surfaces_in_volume = cubit.parse_cubit_list(
         "surface", " in volume " + " ".join(new_vols)
     )
@@ -256,33 +267,38 @@ def find_all_surfaces_of_reflecting_wedge(new_vols, cubit):
             surface_info_dict[surface_id] = {"reflector": True}
         else:
             surface_info_dict[surface_id] = {"reflector": False}
-    print("surface_info_dict", surface_info_dict)
+    if verbose:
+        print("surface_info_dict", surface_info_dict)
     return surface_info_dict
 
 
 def find_reflecting_surfaces_of_reflecting_wedge(
-    geometry_details, surface_reflectivity_name, cubit
+    geometry_details, surface_reflectivity_name, cubit, verbose
 ):
-    print("running find_reflecting_surfaces_of_reflecting_wedge")
+    if verbose:
+        print("running find_reflecting_surfaces_of_reflecting_wedge")
     wedge_volume = None
     for entry in geometry_details:
-        print(entry)
-        print(entry.keys())
+        if verbose:
+            print(entry)
+            print(entry.keys())
         if "surface_reflectivity" in entry.keys():
-            print("found surface_reflectivity")
             surface_info_dict = entry["surface_reflectivity"]
             wedge_volume = " ".join(entry["volumes"])
-            print("wedge_volume", wedge_volume)
             surfaces_in_wedge_volume = cubit.parse_cubit_list(
                 "surface", " in volume " + str(wedge_volume)
             )
-            print("surfaces_in_wedge_volume", surfaces_in_wedge_volume)
+            if verbose:
+                print("found surface_reflectivity")
+                print("wedge_volume", wedge_volume)
+                print("surfaces_in_wedge_volume", surfaces_in_wedge_volume)
             for surface_id in surface_info_dict.keys():
                 if surface_info_dict[surface_id]["reflector"]:
-                    print(
-                        surface_id,
-                        "surface originally reflecting but does it still exist",
-                    )
+                    if verbose:
+                        print(
+                            surface_id,
+                            "surface originally reflecting but does it still exist",
+                        )
                     if surface_id not in surfaces_in_wedge_volume:
                         del surface_info_dict[surface_id]
             for surface_id in surfaces_in_wedge_volume:
@@ -329,10 +345,11 @@ def tag_geometry_with_mats(
             raise ValueError(msg)
 
 
-def find_number_of_volumes_in_each_step_file(files_with_tags, cubit):
+def find_number_of_volumes_in_each_step_file(files_with_tags, cubit, verbose):
     """ """
     for entry in files_with_tags:
-        print(f'loading {entry["cad_filename"]}')
+        if verbose:
+            print(f'loading {entry["cad_filename"]}')
         current_vols = cubit.parse_cubit_list("volume", "all")
         if entry["cad_filename"].endswith(
                 ".stp") or entry["cad_filename"].endswith(".step"):
@@ -377,13 +394,15 @@ def find_number_of_volumes_in_each_step_file(files_with_tags, cubit):
         if "surface_reflectivity" in entry.keys():
             entry["surface_reflectivity"] = find_all_surfaces_of_reflecting_wedge(
                 new_vols_after_unite, cubit)
-            print(
-                "entry['surface_reflectivity']",
-                entry["surface_reflectivity"])
+            if verbose:
+                print(
+                    "entry['surface_reflectivity']",
+                    entry["surface_reflectivity"])
     cubit.cmd("separate body all")
 
     # checks the cad is clean and catches some errors with the geometry early
     cubit.cmd("validate vol all")
-    cubit.cmd("autoheal analyze vol all")
+    # commented out as cmd not known see issue #3
+    # cubit.cmd("autoheal analyze vol all")
 
     return files_with_tags, sum(all_vols)

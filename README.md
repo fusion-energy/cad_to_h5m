@@ -37,7 +37,7 @@ cad-to-h5m -i part1.stp -o dagmc.h5m -t mat:1 -c /opt/Coreform-Cubit-2021.5/bin/
 
 Multiple STP or SAT files can also be combined and converted into a DAGMC
 geometry. This example combines two STP files into a single geometry with
-seperate material tags for each STP file and saves the result as a h5m file.
+separate material tags for each STP file and saves the result as a h5m file.
 
 ```bash
 cad-to-h5m -i part1.stp part2.stp -o dagmc.h5m -t mat:1 mat:2 -c /opt/Coreform-Cubit-2021.5/bin/
@@ -107,10 +107,10 @@ cad_to_h5m(
 ```
 
 Creating a tet mesh files compatible with the OpenMC / DAGMC Unstructured mesh
-format is also possible. Another key called ```tet_mesh``` to the ```files_with_tags``` dictionary will tirgger the meshing of that CAD file.
+format is also possible. Another key called ```tet_mesh``` to the ```files_with_tags``` dictionary will trigger the meshing of that CAD file.
 The value of the key will be passed to the Cubit mesh command as an instruction.
 The following command will produce a ```unstructured_mesh_file.exo```
-file that can then be used in DAGMC compatable neutronics codes. There are examples
+file that can then be used in DAGMC compatible neutronics codes. There are examples
 [1](https://docs.openmc.org/en/latest/examples/unstructured-mesh-part-i.html)
 [2](https://docs.openmc.org/en/latest/examples/unstructured-mesh-part-ii.html) 
 for the use of unstructured meshes in OpenMC.
@@ -156,8 +156,8 @@ cad_to_h5m(
 ```
 The ```cub``` file produced contains a tet mesh as well as the faceted geometry.
 The tet mesh can be extracted and converted to another ```h5m``` file for use in
-openmc. MOAB is needed to convert the file and includes the command line tool
-```mbconvert```, MOAB can be installed into a conda environment with:
+OpenMC. MOAB is needed to convert the file and includes the command line tool
+```mbconvert```, MOAB can be installed into a Conda environment with:
 
 ```
 conda install -c conda-forge moab
@@ -169,12 +169,11 @@ Then ```mbconvert``` can be used to extract and convert the tet mesh from the
 mbconvert unstructured_mesh_file.cub unstructured_mesh_file.h5m
 ```
 
-
 Scaling geometry is also possible. This is useful as particle transport codes
 often make use of cm as the default unit. CAD files typically appear in mm as
 the default limit. Some CAD packages ignore units while others make use of them.
 The h5m files are assumed to be in cm by particle transport codes so often it
-is nessecary to scale up or down the geometry. This can be done by adding
+is necessary to scale up or down the geometry. This can be done by adding
 another key called ```scale``` and a value to the ```files_with_tags```
 dictionary. This example multiplies the geometry by 10.
 
@@ -193,10 +192,7 @@ cad_to_h5m(
 )
 ```
 
-Assigning a material to the implicit complement is also possible. This can be useful 
-on large complex geometries where boolean operations can result in robustness issues. 
-This is implemented by assigning the desired material tag of the implicit complement to the 
-optional ```implicit_complement_material_tag``` argument. Defaults to vacuum.
+Assigning a material to the implicit complement is also possible. This can be useful on large complex geometries where boolean operations can result in robustness issues. This is implemented by assigning the desired material tag of the implicit complement to the optional ```implicit_complement_material_tag``` argument. Defaults to vacuum.
 
 ```python
 from cad_to_h5m import cad_to_h5m

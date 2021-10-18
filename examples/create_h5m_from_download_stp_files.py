@@ -11,7 +11,8 @@ tar = tarfile.open("v0.0.1.tar.gz", "r:gz")
 tar.extractall()
 tar.close()
 
-cad_to_h5m(h5m_filename='dagmc.h5m',
+cad_to_h5m(h5m_filename="dagmc.h5m",
+           verbose=False,
            cubit_path="/opt/Coreform-Cubit-2021.5/bin/",
            files_with_tags=[{"material_tag": "pf_coil_mat",
                              "cad_filename": "fusion_example_for_openmc_using_paramak-0.0.1/stp_files/pf_coils.stp",
