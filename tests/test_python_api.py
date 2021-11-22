@@ -30,9 +30,8 @@ class TestApiUsage(unittest.TestCase):
         """Checks that a h5m file is created from stp files when make_watertight
         is set to false"""
 
-        os.system("rm test_dagmc.h5m")
-
         test_h5m_filename = "test_dagmc.h5m"
+        os.system(f"rm {test_h5m_filename}")
 
         returned_filename = cad_to_h5m(
             files_with_tags=[
@@ -59,9 +58,8 @@ class TestApiUsage(unittest.TestCase):
         """Checks that a h5m file is created from stp files when make_watertight
         is set to false"""
 
-        os.system("rm test_dagmc.h5m")
-
         test_h5m_filename = "subfolder/test_dagmc.h5m"
+        os.system(f"rm {test_h5m_filename}")
 
         returned_filename = cad_to_h5m(
             files_with_tags=[
@@ -239,9 +237,8 @@ class TestApiUsage(unittest.TestCase):
         """Checks that a h5m file is created from stp files when volumes are
         scaled """
 
-        os.system("rm test_dagmc.h5m")
-
         test_h5m_filename = "test_dagmc.h5m"
+        os.system(f"rm {test_h5m_filename}")
 
         returned_filename = cad_to_h5m(
             files_with_tags=[
@@ -261,9 +258,8 @@ class TestApiUsage(unittest.TestCase):
         """Checks h5m file creation and that the resulting h5m file contains
         the material tag assigned to the implicit complement"""
 
-        os.system("rm test_dagmc.h5m")
-
         test_h5m_filename = "test_dagmc.h5m"
+        os.system(f"rm {test_h5m_filename}")
 
         implicit_complement_material = "air"
 
