@@ -361,6 +361,8 @@ def find_number_of_volumes_in_each_step_file(files_with_tags, cubit, verbose, au
             import_type = "step"
         elif entry["cad_filename"].endswith(".sat"):
             import_type = "acis"
+        elif entry["cad_filename"].endswith(".stl"):
+            import_type = "stl"
         else:
             msg = (f'File format for {entry["cad_filename"]} is not supported.'
                    'Try step files or sat files')
