@@ -8,23 +8,6 @@ from cad_to_h5m import cad_to_h5m
 
 
 class TestApiUsage(unittest.TestCase):
-    def setUp(self):
-
-        if not Path("tests/v0.2.0.tar.gz").is_file():
-            url = "https://github.com/fusion-energy/magnetic_fusion_openmc_dagmc_paramak_example/archive/refs/tags/v0.2.0.tar.gz"
-            urllib.request.urlretrieve(url, "tests/v0.2.0.tar.gz")
-
-            tar = tarfile.open("tests/v0.2.0.tar.gz", "r:gz")
-            tar.extractall("tests")
-            tar.close()
-
-        if not Path("tests/0.1.0.tar.gz").is_file():
-            url = "https://github.com/fusion-energy/fusion_neutronics_workflow/archive/refs/tags/0.1.0.tar.gz"
-            urllib.request.urlretrieve(url, "tests/0.1.0.tar.gz")
-
-            tar = tarfile.open("tests/0.1.0.tar.gz", "r:gz")
-            tar.extractall("tests")
-            tar.close()
 
     def test_h5m_file_creation(self):
         """Checks that a h5m file is created from stp files when make_watertight
@@ -36,7 +19,7 @@ class TestApiUsage(unittest.TestCase):
         returned_filename = cad_to_h5m(
             files_with_tags=[
                 {
-                    "cad_filename": "tests/magnetic_fusion_openmc_dagmc_paramak_example-0.2.0/stp_files/blanket.stp",
+                    "cad_filename": "tests/blanket.stp",
                     "material_tag": "mat1",
                 }
             ],
@@ -64,7 +47,7 @@ class TestApiUsage(unittest.TestCase):
         returned_filename = cad_to_h5m(
             files_with_tags=[
                 {
-                    "cad_filename": "tests/magnetic_fusion_openmc_dagmc_paramak_example-0.2.0/stp_files/blanket.stp",
+                    "cad_filename": "tests/blanket.stp",
                     "material_tag": "mat1",
                 }
             ],
@@ -84,7 +67,7 @@ class TestApiUsage(unittest.TestCase):
         cad_to_h5m(
             files_with_tags=[
                 {
-                    "cad_filename": "tests/magnetic_fusion_openmc_dagmc_paramak_example-0.2.0/stp_files/blanket.stp",
+                    "cad_filename": "tests/blanket.stp",
                     "material_tag": "mat1",
                 }
             ],
@@ -102,7 +85,7 @@ class TestApiUsage(unittest.TestCase):
         cad_to_h5m(
             files_with_tags=[
                 {
-                    "cad_filename": "tests/magnetic_fusion_openmc_dagmc_paramak_example-0.2.0/stp_files/blanket.stp",
+                    "cad_filename": "tests/blanket.stp",
                     "material_tag": "mat1",
                 }
             ],
@@ -119,7 +102,7 @@ class TestApiUsage(unittest.TestCase):
         cad_to_h5m(
             files_with_tags=[
                 {
-                    "cad_filename": "tests/magnetic_fusion_openmc_dagmc_paramak_example-0.2.0/stp_files/blanket.stp",
+                    "cad_filename": "tests/blanket.stp",
                     "material_tag": "mat1",
                 }
             ],
@@ -132,7 +115,7 @@ class TestApiUsage(unittest.TestCase):
         cad_to_h5m(
             files_with_tags=[
                 {
-                    "cad_filename": "tests/magnetic_fusion_openmc_dagmc_paramak_example-0.2.0/stp_files/blanket.stp",
+                    "cad_filename": "tests/blanket.stp",
                     "material_tag": "mat1",
                 }
             ],
@@ -155,7 +138,7 @@ class TestApiUsage(unittest.TestCase):
         cad_to_h5m(
             files_with_tags=[
                 {
-                    "cad_filename": "tests/fusion_neutronics_workflow-0.1.0/example_01_single_volume_cell_tally/stage_1_output/steel.stp",
+                    "cad_filename": "tests/steel.stp",
                     "material_tag": "mat1",
                     "tet_mesh": "size 2",
                 }
@@ -170,7 +153,7 @@ class TestApiUsage(unittest.TestCase):
         cad_to_h5m(
             files_with_tags=[
                 {
-                    "cad_filename": "tests/fusion_neutronics_workflow-0.1.0/example_01_single_volume_cell_tally/stage_1_output/steel.stp",
+                    "cad_filename": "tests/steel.stp",
                     "material_tag": "mat1",
                     "tet_mesh": "size 3",
                 }
@@ -192,7 +175,7 @@ class TestApiUsage(unittest.TestCase):
         cad_to_h5m(
             files_with_tags=[
                 {
-                    "cad_filename": "tests/magnetic_fusion_openmc_dagmc_paramak_example-0.2.0/stp_files/pf_coils.stp",
+                    "cad_filename": "tests/pf_coils.stp",
                     "material_tag": "mat1",
                     "tet_mesh": "",
                 }
@@ -209,7 +192,7 @@ class TestApiUsage(unittest.TestCase):
             cad_to_h5m(
                 files_with_tags=[
                     {
-                        "cad_filename": "tests/magnetic_fusion_openmc_dagmc_paramak_example-0.2.0/stp_files/pf_coils.stp",
+                        "cad_filename": "tests/pf_coils.stp",
                         "material_tag": "mat1",
                     }
                 ],
@@ -225,7 +208,7 @@ class TestApiUsage(unittest.TestCase):
             cad_to_h5m(
                 files_with_tags=[
                     {
-                        "cad_filename": "tests/magnetic_fusion_openmc_dagmc_paramak_example-0.2.0/stp_files/pf_coils.stp",
+                        "cad_filename": "tests/pf_coils.stp",
                         "material_tag": "mat1",
                     }
                 ],
@@ -241,7 +224,7 @@ class TestApiUsage(unittest.TestCase):
             cad_to_h5m(
                 files_with_tags=[
                     {
-                        "cad_filename": "tests/magnetic_fusion_openmc_dagmc_paramak_example-0.2.0/stp_files/pf_coils.stp",
+                        "cad_filename": "tests/pf_coils.stp",
                         "material_tag": "mat1",
                     }
                 ],
@@ -260,7 +243,7 @@ class TestApiUsage(unittest.TestCase):
         returned_filename = cad_to_h5m(
             files_with_tags=[
                 {
-                    "cad_filename": "tests/magnetic_fusion_openmc_dagmc_paramak_example-0.2.0/stp_files/blanket.stp",
+                    "cad_filename": "tests/blanket.stp",
                     "material_tag": "mat1",
                     "scale": 0.1,
                 }
@@ -284,7 +267,7 @@ class TestApiUsage(unittest.TestCase):
         returned_filename = cad_to_h5m(
             files_with_tags=[
                 {
-                    "cad_filename": "tests/magnetic_fusion_openmc_dagmc_paramak_example-0.2.0/stp_files/blanket.stp",
+                    "cad_filename": "tests/blanket.stp",
                     "material_tag": "mat1",
                 }
             ],
