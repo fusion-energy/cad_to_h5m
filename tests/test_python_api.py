@@ -174,7 +174,7 @@ class TestApiUsage(unittest.TestCase):
         cad_to_h5m(
             files_with_tags=[
                 {
-                    "cad_filename": "tests/pf_coils.stp",
+                    "cad_filename": "tests/pf_coil_1.stp",
                     "material_tag": "mat1",
                     "tet_mesh": "",
                 }
@@ -191,7 +191,7 @@ class TestApiUsage(unittest.TestCase):
             cad_to_h5m(
                 files_with_tags=[
                     {
-                        "cad_filename": "tests/pf_coils.stp",
+                        "cad_filename": "tests/pf_coil_1.stp",
                         "material_tag": "mat1",
                     }
                 ],
@@ -207,7 +207,7 @@ class TestApiUsage(unittest.TestCase):
             cad_to_h5m(
                 files_with_tags=[
                     {
-                        "cad_filename": "tests/pf_coils.stp",
+                        "cad_filename": "tests/pf_coil_1.stp",
                         "material_tag": "mat1",
                     }
                 ],
@@ -223,7 +223,7 @@ class TestApiUsage(unittest.TestCase):
             cad_to_h5m(
                 files_with_tags=[
                     {
-                        "cad_filename": "tests/pf_coils.stp",
+                        "cad_filename": "tests/pf_coil_1.stp",
                         "material_tag": "mat1",
                     }
                 ],
