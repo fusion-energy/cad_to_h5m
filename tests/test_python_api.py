@@ -66,7 +66,8 @@ class TestApiUsage(unittest.TestCase):
                 {
                     "cad_filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/blanket.stp",
                     "material_tag": "mat1",
-                }],
+                }
+            ],
             h5m_filename=test_h5m_filename,
             make_watertight=False,
         )
@@ -85,7 +86,8 @@ class TestApiUsage(unittest.TestCase):
                 {
                     "cad_filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/blanket.stp",
                     "material_tag": "mat1",
-                }],
+                }
+            ],
             h5m_filename="dagmc.h5m",
             make_watertight=True,
         )
@@ -102,7 +104,8 @@ class TestApiUsage(unittest.TestCase):
                 {
                     "cad_filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/blanket.stp",
                     "material_tag": "mat1",
-                }],
+                }
+            ],
             cubit_filename="dagmc.cub",
         )
 
@@ -118,7 +121,8 @@ class TestApiUsage(unittest.TestCase):
                 {
                     "cad_filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/blanket.stp",
                     "material_tag": "mat1",
-                }],
+                }
+            ],
             h5m_filename="dagmc_default_faceting_tolerance.h5m",
             faceting_tolerance=1.0e-2,
         )
@@ -130,7 +134,8 @@ class TestApiUsage(unittest.TestCase):
                 {
                     "cad_filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/blanket.stp",
                     "material_tag": "mat1",
-                }],
+                }
+            ],
             h5m_filename="dagmc_small_faceting_tolerance.h5m",
             faceting_tolerance=0.5e-2,
         )
@@ -152,7 +157,9 @@ class TestApiUsage(unittest.TestCase):
                 {
                     "cad_filename": "tests/neutronics_workflow-0.0.2/example_01_single_volume_cell_tally/stage_1_output/steel.stp",
                     "material_tag": "mat1",
-                    "tet_mesh": "size 2"}],
+                    "tet_mesh": "size 2",
+                }
+            ],
             exo_filename="umesh_2.exo",
         )
 
@@ -165,7 +172,9 @@ class TestApiUsage(unittest.TestCase):
                 {
                     "cad_filename": "tests/neutronics_workflow-0.0.2/example_01_single_volume_cell_tally/stage_1_output/steel.stp",
                     "material_tag": "mat1",
-                    "tet_mesh": "size 3"}],
+                    "tet_mesh": "size 3",
+                }
+            ],
             exo_filename="umesh_3.exo",
         )
 
@@ -185,7 +194,9 @@ class TestApiUsage(unittest.TestCase):
                 {
                     "cad_filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/pf_coils.stp",
                     "material_tag": "mat1",
-                    "tet_mesh": ""}],
+                    "tet_mesh": "",
+                }
+            ],
             exo_filename="umesh_default.exo",
         )
 
@@ -200,9 +211,11 @@ class TestApiUsage(unittest.TestCase):
                     {
                         "cad_filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/pf_coils.stp",
                         "material_tag": "mat1",
-                    }],
+                    }
+                ],
                 exo_filename="output_file_with.not_correct_suffix",
             )
+
         self.assertRaises(ValueError, incorrect_suffix)
 
     def test_h5m_file_suffix_error_handling(self):
@@ -214,9 +227,11 @@ class TestApiUsage(unittest.TestCase):
                     {
                         "cad_filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/pf_coils.stp",
                         "material_tag": "mat1",
-                    }],
+                    }
+                ],
                 h5m_filename="output_file_with.not_correct_suffix",
             )
+
         self.assertRaises(ValueError, incorrect_suffix)
 
     def test_cubit_file_suffix_error_handling(self):
@@ -228,14 +243,16 @@ class TestApiUsage(unittest.TestCase):
                     {
                         "cad_filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/pf_coils.stp",
                         "material_tag": "mat1",
-                    }],
+                    }
+                ],
                 cubit_filename="output_file_with.not_correct_suffix",
             )
+
         self.assertRaises(ValueError, incorrect_suffix)
 
     def test_h5m_file_creation_with_scaling(self):
         """Checks that a h5m file is created from stp files when volumes are
-        scaled """
+        scaled"""
 
         test_h5m_filename = "test_dagmc.h5m"
         os.system(f"rm {test_h5m_filename}")
@@ -246,7 +263,8 @@ class TestApiUsage(unittest.TestCase):
                     "cad_filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/blanket.stp",
                     "material_tag": "mat1",
                     "scale": 0.1,
-                }],
+                }
+            ],
             h5m_filename=test_h5m_filename,
         )
 
@@ -268,7 +286,8 @@ class TestApiUsage(unittest.TestCase):
                 {
                     "cad_filename": "tests/fusion_example_for_openmc_using_paramak-0.0.1/stp_files/blanket.stp",
                     "material_tag": "mat1",
-                }],
+                }
+            ],
             implicit_complement_material_tag=implicit_complement_material,
             h5m_filename=test_h5m_filename,
         )
