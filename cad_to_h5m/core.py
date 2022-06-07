@@ -26,6 +26,7 @@ def cad_to_h5m(
     exo_filename: Optional[str] = None,
     implicit_complement_material_tag: Optional[str] = None,
     verbose: bool = True,
+    autoheal: bool = False
 ):
     """Converts a CAD files in STP or SAT format into a h5m file for use in
     DAGMC simulations. The h5m file contains material tags associated with the
@@ -118,9 +119,9 @@ def cad_to_h5m(
     (
         geometry_details,
         total_number_of_volumes,
-    ) = find_number_of_volumes_in_each_step_file(files_with_tags, cubit, verbose)
+    ) = find_number_of_volumes_in_each_step_file(files_with_tags, cubit, verbose, autoheal)
 
-    scale_geometry(geometry_details, cubit)
+    scale_geometry(geometry_details, cubit, autoheal)
 
     tag_geometry_with_mats(geometry_details, implicit_complement_material_tag, cubit)
 
@@ -168,11 +169,15 @@ def create_tet_mesh(geometry_details, cubit):
                 cubit.cmd("mesh volume " + str(volume))
 
 
-def scale_geometry(geometry_details: dict, cubit):
+def scale_geometry(geometry_details: dict, cubit, autoheal):
     for entry in geometry_details:
         if "scale" in entry.keys():
             cubit.cmd(f'volume {" ".join(entry["volumes"])}  scale  {entry["scale"]}')
 
+
+    # autoheal geometry issues 
+    if autoheal:
+        cubit.cmd("healer autoheal vol all")
 
 # TODO implent a flag to allow tet file info to be saved
 # def save_tet_details_to_json_file(
@@ -347,7 +352,7 @@ def tag_geometry_with_mats(geometry_details, implicit_complement_material_tag, c
             raise ValueError(msg)
 
 
-def find_number_of_volumes_in_each_step_file(files_with_tags, cubit, verbose):
+def find_number_of_volumes_in_each_step_file(files_with_tags, cubit, verbose, autoheal):
     """ """
     for entry in files_with_tags:
         if verbose:
@@ -359,6 +364,8 @@ def find_number_of_volumes_in_each_step_file(files_with_tags, cubit, verbose):
             import_type = "step"
         elif entry["cad_filename"].endswith(".sat"):
             import_type = "acis"
+        elif entry["cad_filename"].endswith(".stl"):
+            import_type = "stl"
         else:
             msg = (
                 f'File format for {entry["cad_filename"]} is not supported.'
@@ -400,7 +407,9 @@ def find_number_of_volumes_in_each_step_file(files_with_tags, cubit, verbose):
 
     # checks the cad is clean and catches some errors with the geometry early
     cubit.cmd("validate vol all")
-    # commented out as cmd not known see issue #3
-    # cubit.cmd("autoheal analyze vol all")
+
+    # autoheal geometry issues 
+    if autoheal:
+        cubit.cmd("healer autoheal vol all")
 
     return files_with_tags, sum(all_vols)
