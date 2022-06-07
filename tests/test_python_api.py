@@ -8,7 +8,6 @@ from cad_to_h5m import cad_to_h5m
 
 
 class TestApiUsage(unittest.TestCase):
-
     def test_h5m_file_creation(self):
         """Checks that a h5m file is created from stp files when make_watertight
         is set to false"""
