@@ -11,10 +11,10 @@ class TestApiUsage(unittest.TestCase):
     def setUp(self):
 
         if not Path("tests/v0.2.0.tar.gz").is_file():
-            url = "https://github.com/Shimwell/fusion_example_for_openmc_using_paramak/archive/refs/tags/v0.2.0.tar.gz"
+            url = "https://github.com/fusion-energy/magnetic_fusion_openmc_dagmc_paramak_example/archive/refs/tags/v0.2.0.tar.gz"
             urllib.request.urlretrieve(url, "tests/v0.2.0.tar.gz")
 
-            tar = tarfile.open("tests/v0.0.1.tar.gz", "r:gz")
+            tar = tarfile.open("tests/v0.2.0.tar.gz", "r:gz")
             tar.extractall("tests")
             tar.close()
 
@@ -36,7 +36,7 @@ class TestApiUsage(unittest.TestCase):
         returned_filename = cad_to_h5m(
             files_with_tags=[
                 {
-                    "cad_filename": "tests/fusion_example_for_openmc_using_paramak-v0.2.0/stp_files/blanket.stp",
+                    "cad_filename": "tests/magnetic_fusion_openmc_dagmc_paramak_example-0.2.0/stp_files/blanket.stp",
                     "material_tag": "mat1",
                 }
             ],
@@ -64,7 +64,7 @@ class TestApiUsage(unittest.TestCase):
         returned_filename = cad_to_h5m(
             files_with_tags=[
                 {
-                    "cad_filename": "tests/fusion_example_for_openmc_using_paramak-0.2.0/stp_files/blanket.stp",
+                    "cad_filename": "tests/magnetic_fusion_openmc_dagmc_paramak_example-0.2.0/stp_files/blanket.stp",
                     "material_tag": "mat1",
                 }
             ],
@@ -84,7 +84,7 @@ class TestApiUsage(unittest.TestCase):
         cad_to_h5m(
             files_with_tags=[
                 {
-                    "cad_filename": "tests/fusion_example_for_openmc_using_paramak-0.2.0/stp_files/blanket.stp",
+                    "cad_filename": "tests/magnetic_fusion_openmc_dagmc_paramak_example-0.2.0/stp_files/blanket.stp",
                     "material_tag": "mat1",
                 }
             ],
@@ -102,7 +102,7 @@ class TestApiUsage(unittest.TestCase):
         cad_to_h5m(
             files_with_tags=[
                 {
-                    "cad_filename": "tests/fusion_example_for_openmc_using_paramak-0.2.0/stp_files/blanket.stp",
+                    "cad_filename": "tests/magnetic_fusion_openmc_dagmc_paramak_example-0.2.0/stp_files/blanket.stp",
                     "material_tag": "mat1",
                 }
             ],
@@ -119,7 +119,7 @@ class TestApiUsage(unittest.TestCase):
         cad_to_h5m(
             files_with_tags=[
                 {
-                    "cad_filename": "tests/fusion_example_for_openmc_using_paramak-0.2.0/stp_files/blanket.stp",
+                    "cad_filename": "tests/magnetic_fusion_openmc_dagmc_paramak_example-0.2.0/stp_files/blanket.stp",
                     "material_tag": "mat1",
                 }
             ],
@@ -132,7 +132,7 @@ class TestApiUsage(unittest.TestCase):
         cad_to_h5m(
             files_with_tags=[
                 {
-                    "cad_filename": "tests/fusion_example_for_openmc_using_paramak-0.2.0/stp_files/blanket.stp",
+                    "cad_filename": "tests/magnetic_fusion_openmc_dagmc_paramak_example-0.2.0/stp_files/blanket.stp",
                     "material_tag": "mat1",
                 }
             ],
@@ -192,7 +192,7 @@ class TestApiUsage(unittest.TestCase):
         cad_to_h5m(
             files_with_tags=[
                 {
-                    "cad_filename": "tests/fusion_example_for_openmc_using_paramak-0.2.0/stp_files/pf_coils.stp",
+                    "cad_filename": "tests/magnetic_fusion_openmc_dagmc_paramak_example-0.2.0/stp_files/pf_coils.stp",
                     "material_tag": "mat1",
                     "tet_mesh": "",
                 }
@@ -209,7 +209,7 @@ class TestApiUsage(unittest.TestCase):
             cad_to_h5m(
                 files_with_tags=[
                     {
-                        "cad_filename": "tests/fusion_example_for_openmc_using_paramak-0.2.0/stp_files/pf_coils.stp",
+                        "cad_filename": "tests/magnetic_fusion_openmc_dagmc_paramak_example-0.2.0/stp_files/pf_coils.stp",
                         "material_tag": "mat1",
                     }
                 ],
@@ -225,7 +225,7 @@ class TestApiUsage(unittest.TestCase):
             cad_to_h5m(
                 files_with_tags=[
                     {
-                        "cad_filename": "tests/fusion_example_for_openmc_using_paramak-0.2.0/stp_files/pf_coils.stp",
+                        "cad_filename": "tests/magnetic_fusion_openmc_dagmc_paramak_example-0.2.0/stp_files/pf_coils.stp",
                         "material_tag": "mat1",
                     }
                 ],
@@ -241,7 +241,7 @@ class TestApiUsage(unittest.TestCase):
             cad_to_h5m(
                 files_with_tags=[
                     {
-                        "cad_filename": "tests/fusion_example_for_openmc_using_paramak-0.2.0/stp_files/pf_coils.stp",
+                        "cad_filename": "tests/magnetic_fusion_openmc_dagmc_paramak_example-0.2.0/stp_files/pf_coils.stp",
                         "material_tag": "mat1",
                     }
                 ],
@@ -260,7 +260,7 @@ class TestApiUsage(unittest.TestCase):
         returned_filename = cad_to_h5m(
             files_with_tags=[
                 {
-                    "cad_filename": "tests/fusion_example_for_openmc_using_paramak-0.2.0/stp_files/blanket.stp",
+                    "cad_filename": "tests/magnetic_fusion_openmc_dagmc_paramak_example-0.2.0/stp_files/blanket.stp",
                     "material_tag": "mat1",
                     "scale": 0.1,
                 }
@@ -284,7 +284,7 @@ class TestApiUsage(unittest.TestCase):
         returned_filename = cad_to_h5m(
             files_with_tags=[
                 {
-                    "cad_filename": "tests/fusion_example_for_openmc_using_paramak-0.2.0/stp_files/blanket.stp",
+                    "cad_filename": "tests/magnetic_fusion_openmc_dagmc_paramak_example-0.2.0/stp_files/blanket.stp",
                     "material_tag": "mat1",
                 }
             ],
