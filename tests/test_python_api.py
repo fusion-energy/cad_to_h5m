@@ -8,6 +8,27 @@ from cad_to_h5m import cad_to_h5m
 
 
 class TestApiUsage(unittest.TestCase):
+
+    def test_h5m_file_creation_from_stl(self):
+        """Checks that a h5m file is created from a stl file and that the correct tags are contained"""
+
+        test_h5m_filename = "test_dagmc.h5m"
+        os.system(f"rm {test_h5m_filename}")
+
+        returned_filename = cad_to_h5m(
+            files_with_tags=[
+                {
+                    "cad_filename": "tests/steel.stl",
+                    "material_tag": "mat1",
+                }
+            ],
+            h5m_filename=test_h5m_filename,
+        )
+
+        assert Path(test_h5m_filename).is_file()
+        assert Path(returned_filename).is_file()
+        assert test_h5m_filename == returned_filename
+
     def test_h5m_file_creation(self):
         """Checks that a h5m file is created from stp files when make_watertight
         is set to false"""
