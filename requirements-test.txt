@@ -1,2 +1,3 @@
 
+dagmc_h5m_file_inspector
 pytest

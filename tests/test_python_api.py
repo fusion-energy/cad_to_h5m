@@ -1,8 +1,7 @@
 import os
-import tarfile
 import unittest
-import urllib.request
 from pathlib import Path
+import dagmc_h5m_file_inspector as di
 
 from cad_to_h5m import cad_to_h5m
 
@@ -17,7 +16,7 @@ class TestApiUsage(unittest.TestCase):
         returned_filename = cad_to_h5m(
             files_with_tags=[
                 {
-                    "cad_filename": "tests/blanket.stl",
+                    "cad_filename": "tests/steel.stl",
                     "material_tag": "mat1",
                 }
             ],
@@ -27,6 +26,8 @@ class TestApiUsage(unittest.TestCase):
         assert Path(test_h5m_filename).is_file()
         assert Path(returned_filename).is_file()
         assert test_h5m_filename == returned_filename
+        assert di.get_materials_from_h5m(test_h5m_filename) == ["mat1"]
+        assert di.get_volumes_from_h5m(test_h5m_filename) == [1]
 
     def test_h5m_file_creation(self):
         """Checks that a h5m file is created from stp files when make_watertight
@@ -39,7 +40,7 @@ class TestApiUsage(unittest.TestCase):
             files_with_tags=[
                 {
                     "cad_filename": "tests/blanket.stp",
-                    "material_tag": "mat1",
+                    "material_tag": "mat2",
                 }
             ],
             h5m_filename=test_h5m_filename,
@@ -55,6 +56,8 @@ class TestApiUsage(unittest.TestCase):
         assert Path(test_h5m_filename).is_file()
         assert Path(returned_filename).is_file()
         assert test_h5m_filename == returned_filename
+        assert di.get_materials_from_h5m(test_h5m_filename) == ["mat2"]
+        assert di.get_volumes_from_h5m(test_h5m_filename) == [1]
 
     def test_h5m_file_creation_in_subfolder(self):
         """Checks that a h5m file is created from stp files when make_watertight
@@ -67,7 +70,7 @@ class TestApiUsage(unittest.TestCase):
             files_with_tags=[
                 {
                     "cad_filename": "tests/blanket.stp",
-                    "material_tag": "mat1",
+                    "material_tag": "mat3",
                 }
             ],
             h5m_filename=test_h5m_filename,
@@ -77,6 +80,8 @@ class TestApiUsage(unittest.TestCase):
         assert Path(test_h5m_filename).is_file()
         assert Path(returned_filename).is_file()
         assert test_h5m_filename == returned_filename
+        assert di.get_materials_from_h5m(test_h5m_filename) == ["mat3"]
+        assert di.get_volumes_from_h5m(test_h5m_filename) == [1]
 
     def test_watertight_h5m_file_creation(self):
         """Checks that a h5m file is created from stp files"""
