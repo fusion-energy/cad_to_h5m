@@ -18,11 +18,11 @@ class TestApiUsage(unittest.TestCase):
             tar.extractall("tests")
             tar.close()
 
-        if not Path("tests/v0.0.2.tar.gz").is_file():
-            url = "https://github.com/fusion-energy/neutronics_workflow/archive/refs/tags/v0.0.2.tar.gz"
-            urllib.request.urlretrieve(url, "tests/v0.0.2.tar.gz")
+        if not Path("tests/0.1.0.tar.gz").is_file():
+            url = "https://github.com/fusion-energy/fusion_neutronics_workflow/archive/refs/tags/0.1.0.tar.gz"
+            urllib.request.urlretrieve(url, "tests/0.1.0.tar.gz")
 
-            tar = tarfile.open("tests/v0.0.2.tar.gz", "r:gz")
+            tar = tarfile.open("tests/0.1.0.tar.gz", "r:gz")
             tar.extractall("tests")
             tar.close()
 
