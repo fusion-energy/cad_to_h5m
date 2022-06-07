@@ -8,7 +8,6 @@ from cad_to_h5m import cad_to_h5m
 
 
 class TestApiUsage(unittest.TestCase):
-
     def test_h5m_file_creation_from_stl(self):
         """Checks that a h5m file is created from stl files"""
 
@@ -22,7 +21,7 @@ class TestApiUsage(unittest.TestCase):
                     "material_tag": "mat1",
                 }
             ],
-            h5m_filename=test_h5m_filename
+            h5m_filename=test_h5m_filename,
         )
 
         assert Path(test_h5m_filename).is_file()
