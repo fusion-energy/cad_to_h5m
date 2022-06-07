@@ -25,7 +25,8 @@ def cad_to_h5m(
     surface_reflectivity_name: str = "reflective",
     exo_filename: Optional[str] = None,
     implicit_complement_material_tag: Optional[str] = None,
-    verbose: bool = True
+    verbose: bool = True,
+    autoheal: bool = False,
 ):
     """Converts a CAD files in STP or SAT format into a h5m file for use in
     DAGMC simulations. The h5m file contains material tags associated with the
@@ -74,7 +75,8 @@ def cad_to_h5m(
     else:
         msg = (
             'The h5m_filename argument should end with ".h5m". The provided '
-            f'h5m_filename "{h5m_filename}" does not end with .h5m')
+            f'h5m_filename "{h5m_filename}" does not end with .h5m'
+        )
         raise ValueError(msg)
 
     if exo_filename is None or Path(exo_filename).suffix == ".exo":
@@ -82,17 +84,18 @@ def cad_to_h5m(
     else:
         msg = (
             'The exo_filename argument should end with ".exo". The provided '
-            f'exo_filename "{exo_filename}" does not end with .exo')
+            f'exo_filename "{exo_filename}" does not end with .exo'
+        )
         raise ValueError(msg)
 
-    if cubit_filename is None or Path(cubit_filename).suffix in [
-            ".cub", ".cub5"]:
+    if cubit_filename is None or Path(cubit_filename).suffix in [".cub", ".cub5"]:
         pass
     else:
         msg = (
             'The cubit_filename argument should end with ".cub" or ".cub5". '
             f'The provided cubit_filename "{cubit_filename}" does not end '
-            ' with either')
+            " with either"
+        )
         raise ValueError(msg)
 
     sys.path.append(cubit_path)
@@ -108,19 +111,21 @@ def cad_to_h5m(
 
     cubit.init([])
     if not verbose:
-        cubit.cmd('set echo off')
-        cubit.cmd('set info off')
-        cubit.cmd('set journal off')
-        cubit.cmd('set warning off')
+        cubit.cmd("set echo off")
+        cubit.cmd("set info off")
+        cubit.cmd("set journal off")
+        cubit.cmd("set warning off")
 
-    geometry_details, total_number_of_volumes = find_number_of_volumes_in_each_step_file(
-        files_with_tags, cubit, verbose)
-
-    scale_geometry(geometry_details, cubit)
-
-    tag_geometry_with_mats(
-        geometry_details, implicit_complement_material_tag, cubit
+    (
+        geometry_details,
+        total_number_of_volumes,
+    ) = find_number_of_volumes_in_each_step_file(
+        files_with_tags, cubit, verbose, autoheal
     )
+
+    scale_geometry(geometry_details, cubit, autoheal)
+
+    tag_geometry_with_mats(geometry_details, implicit_complement_material_tag, cubit)
 
     if imprint and total_number_of_volumes > 1:
         imprint_geometry(cubit)
@@ -145,7 +150,7 @@ def cad_to_h5m(
     )
 
     # resets cubit workspace
-    cubit.cmd('reset')
+    cubit.cmd("reset")
 
     return h5m_filename
 
@@ -166,11 +171,15 @@ def create_tet_mesh(geometry_details, cubit):
                 cubit.cmd("mesh volume " + str(volume))
 
 
-def scale_geometry(geometry_details: dict, cubit):
+def scale_geometry(geometry_details: dict, cubit, autoheal):
     for entry in geometry_details:
-        if 'scale' in entry.keys():
-            cubit.cmd(
-                f'volume {" ".join(entry["volumes"])}  scale  {entry["scale"]}')
+        if "scale" in entry.keys():
+            cubit.cmd(f'volume {" ".join(entry["volumes"])}  scale  {entry["scale"]}')
+
+    # autoheal geometry issues
+    if autoheal:
+        cubit.cmd("healer autoheal vol all")
+
 
 # TODO implent a flag to allow tet file info to be saved
 # def save_tet_details_to_json_file(
@@ -196,7 +205,7 @@ def save_output_files(
     faceting_tolerance: float,
     exo_filename: str,
     cubit,
-    verbose: bool
+    verbose: bool,
 ):
     """This saves the output files"""
     cubit.cmd("set attribute on")
@@ -316,16 +325,16 @@ def find_reflecting_surfaces_of_reflecting_wedge(
     return geometry_details, wedge_volume
 
 
-def tag_geometry_with_mats(
-    geometry_details, implicit_complement_material_tag, cubit
-):
+def tag_geometry_with_mats(geometry_details, implicit_complement_material_tag, cubit):
     for entry in geometry_details:
         if "material_tag" in entry.keys():
 
-            if len(entry['material_tag']) > 27:
-                msg = ("material_tag > 28 characters. Material tags "
-                       "must be less than 28 characters use in DAGMC. "
-                       f"{entry['material_tag']} is too long.")
+            if len(entry["material_tag"]) > 27:
+                msg = (
+                    "material_tag > 28 characters. Material tags "
+                    "must be less than 28 characters use in DAGMC. "
+                    f"{entry['material_tag']} is too long."
+                )
                 raise ValueError(msg)
 
             cubit.cmd(
@@ -334,7 +343,7 @@ def tag_geometry_with_mats(
                 + '" add volume '
                 + " ".join(entry["volumes"])
             )
-            if entry['material_tag'].lower() == 'graveyard':
+            if entry["material_tag"].lower() == "graveyard":
                 if implicit_complement_material_tag is not None:
                     graveyard_volume_number = entry["volumes"][0]
                     cubit.cmd(
@@ -345,20 +354,25 @@ def tag_geometry_with_mats(
             raise ValueError(msg)
 
 
-def find_number_of_volumes_in_each_step_file(files_with_tags, cubit, verbose):
+def find_number_of_volumes_in_each_step_file(files_with_tags, cubit, verbose, autoheal):
     """ """
     for entry in files_with_tags:
         if verbose:
             print(f'loading {entry["cad_filename"]}')
         current_vols = cubit.parse_cubit_list("volume", "all")
-        if entry["cad_filename"].endswith(
-                ".stp") or entry["cad_filename"].endswith(".step"):
+        if entry["cad_filename"].endswith(".stp") or entry["cad_filename"].endswith(
+            ".step"
+        ):
             import_type = "step"
         elif entry["cad_filename"].endswith(".sat"):
             import_type = "acis"
+        elif entry["cad_filename"].endswith(".stl"):
+            import_type = "stl"
         else:
-            msg = (f'File format for {entry["cad_filename"]} is not supported.'
-                   'Try step files or sat files')
+            msg = (
+                f'File format for {entry["cad_filename"]} is not supported.'
+                "Try step files or sat files"
+            )
             raise ValueError(msg)
         if not Path(entry["cad_filename"]).is_file():
             msg = f'File with filename {entry["cad_filename"]} could not be found'
@@ -376,33 +390,28 @@ def find_number_of_volumes_in_each_step_file(files_with_tags, cubit, verbose):
         new_vols = list(map(str, new_vols))
         if len(new_vols) > 1:
             cubit.cmd(
-                "unite vol " +
-                " ".join(new_vols) +
-                " with vol " +
-                " ".join(new_vols))
+                "unite vol " + " ".join(new_vols) + " with vol " + " ".join(new_vols)
+            )
         all_vols = cubit.parse_cubit_list("volume", "all")
-        new_vols_after_unite = set(
-            current_vols).symmetric_difference(set(all_vols))
+        new_vols_after_unite = set(current_vols).symmetric_difference(set(all_vols))
         new_vols_after_unite = list(map(str, new_vols_after_unite))
         entry["volumes"] = new_vols_after_unite
         cubit.cmd(
-            'group "' +
-            short_file_name +
-            '" add volume ' +
-            " ".join(
-                entry["volumes"]))
+            'group "' + short_file_name + '" add volume ' + " ".join(entry["volumes"])
+        )
         if "surface_reflectivity" in entry.keys():
             entry["surface_reflectivity"] = find_all_surfaces_of_reflecting_wedge(
-                new_vols_after_unite, cubit)
+                new_vols_after_unite, cubit
+            )
             if verbose:
-                print(
-                    "entry['surface_reflectivity']",
-                    entry["surface_reflectivity"])
+                print("entry['surface_reflectivity']", entry["surface_reflectivity"])
     cubit.cmd("separate body all")
 
     # checks the cad is clean and catches some errors with the geometry early
     cubit.cmd("validate vol all")
-    # commented out as cmd not known see issue #3
-    # cubit.cmd("autoheal analyze vol all")
+
+    # autoheal geometry issues
+    if autoheal:
+        cubit.cmd("healer autoheal vol all")
 
     return files_with_tags, sum(all_vols)
