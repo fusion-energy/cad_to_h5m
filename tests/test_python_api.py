@@ -8,7 +8,6 @@ from cad_to_h5m import cad_to_h5m
 
 
 class TestApiUsage(unittest.TestCase):
-
     def test_h5m_file_creation_from_stl(self):
         """Checks that a h5m file is created from a stl file and that the correct tags are contained"""
 
