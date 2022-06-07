@@ -26,7 +26,7 @@ def cad_to_h5m(
     exo_filename: Optional[str] = None,
     implicit_complement_material_tag: Optional[str] = None,
     verbose: bool = True,
-    autoheal: bool = False
+    autoheal: bool = False,
 ):
     """Converts a CAD files in STP or SAT format into a h5m file for use in
     DAGMC simulations. The h5m file contains material tags associated with the
@@ -119,7 +119,9 @@ def cad_to_h5m(
     (
         geometry_details,
         total_number_of_volumes,
-    ) = find_number_of_volumes_in_each_step_file(files_with_tags, cubit, verbose, autoheal)
+    ) = find_number_of_volumes_in_each_step_file(
+        files_with_tags, cubit, verbose, autoheal
+    )
 
     scale_geometry(geometry_details, cubit, autoheal)
 
@@ -174,10 +176,10 @@ def scale_geometry(geometry_details: dict, cubit, autoheal):
         if "scale" in entry.keys():
             cubit.cmd(f'volume {" ".join(entry["volumes"])}  scale  {entry["scale"]}')
 
-
-    # autoheal geometry issues 
+    # autoheal geometry issues
     if autoheal:
         cubit.cmd("healer autoheal vol all")
+
 
 # TODO implent a flag to allow tet file info to be saved
 # def save_tet_details_to_json_file(
@@ -408,7 +410,7 @@ def find_number_of_volumes_in_each_step_file(files_with_tags, cubit, verbose, au
     # checks the cad is clean and catches some errors with the geometry early
     cubit.cmd("validate vol all")
 
-    # autoheal geometry issues 
+    # autoheal geometry issues
     if autoheal:
         cubit.cmd("healer autoheal vol all")
 
