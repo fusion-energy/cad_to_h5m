@@ -1,3 +1,5 @@
+# This package has been replaced by cad-to-dagmc](https://github.com/fusion-energy/cad_to_dagmc)
+
 [![N|Python](https://www.python.org/static/community_logos/python-powered-w-100x40.png)](https://www.python.org)
 
 [![CircleCI](https://circleci.com/gh/fusion-energy/cad_to_h5m/tree/main.svg?style=svg)](https://circleci.com/gh/fusion-energy/cad_to_h5m/tree/main) [![CI with docker build](https://github.com/fusion-energy/cad_to_h5m/actions/workflows/ci_with_docker_build.yml/badge.svg)](https://github.com/fusion-energy/cad_to_h5m/actions/workflows/ci_with_docker_build.yml)
