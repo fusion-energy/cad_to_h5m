@@ -1,4 +1,4 @@
-# This package has been replaced by cad-to-dagmc](https://github.com/fusion-energy/cad_to_dagmc)
+# This package has been replaced by [cad-to-dagmc](https://github.com/fusion-energy/cad_to_dagmc)
 
 [![N|Python](https://www.python.org/static/community_logos/python-powered-w-100x40.png)](https://www.python.org)
 
